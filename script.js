@@ -101,7 +101,7 @@ const state = {
   fact: 0,
   points: [],
   dpr: 1,
-  sound: false,
+  sound: true,
   hemisphere: "south",
   autoOrbit: false,
   lastFrame: 0,
@@ -314,6 +314,8 @@ function setMode(mode) {
   phaseStrip.style.opacity = deep ? ".15" : orbit ? ".35" : "1";
   document.querySelector(".fact-card").hidden = mode !== "atlas";
   document.querySelector("#deepDive").hidden = !deep;
+  stage.hidden = deep;
+  stage.setAttribute("aria-hidden", String(deep));
   document.querySelector(".intro").style.opacity = deep ? "0" : "1";
   draw();
 }
@@ -449,6 +451,7 @@ document.querySelector("#soundToggle").addEventListener("click", (event) => {
   state.sound = !state.sound;
   event.currentTarget.textContent = state.sound ? "SOUND ON" : "SOUND OFF";
   event.currentTarget.setAttribute("aria-pressed", state.sound);
+  event.currentTarget.setAttribute("aria-label", state.sound ? "Turn sound off" : "Turn sound on");
   const player = document.querySelector("#musicPlayer");
   player.contentWindow?.postMessage(JSON.stringify({
     event: "command",
