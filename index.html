@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An interactive 3D-style moon phase explorer for students.">
+  <title>Lunar Loop — Moon Phase Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="southern-view">
+  <main>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Lunar Loop home">
+        <span class="brand-mark" aria-hidden="true">◐</span>
+        <span>LUNAR LOOP</span>
+      </a>
+      <div class="mode-switch" role="group" aria-label="Explorer mode">
+        <button class="mode-button active" data-mode="atlas" aria-pressed="true">
+          <span class="button-number">01</span> Phase Atlas
+        </button>
+        <button class="mode-button" data-mode="orbit" aria-pressed="false">
+          <span class="button-number">02</span> Orbit Lab
+        </button>
+        <button class="mode-button" data-mode="deep" aria-pressed="false">
+          <span class="button-number">03</span> Deep Dives
+        </button>
+      </div>
+      <div class="view-controls">
+        <button class="hemisphere-button" id="hemisphereToggle" aria-label="Switch to Northern Hemisphere view">HEMISPHERE · S</button>
+        <button class="sound-button" id="soundToggle" aria-label="Turn sound on" aria-pressed="false">SOUND OFF</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="intro">
+        <p class="eyebrow" id="modeEyebrow">THE COMPLETE CYCLE</p>
+        <h1 id="modeTitle">Eight phases.<br><em>One orbit.</em></h1>
+        <p class="lede" id="modeDescription">See the Moon’s sunlit half from eight different points in its journey around Earth.</p>
+      </div>
+
+      <div class="space-stage" id="spaceStage">
+        <canvas id="spaceCanvas" aria-label="A 3D-style view of Earth, the Sun, and the Moon's orbit"></canvas>
+        <div class="sun-label"><span>THE SUN</span><i></i></div>
+        <div class="earth-label" id="earthLabel">YOU ARE HERE</div>
+        <div class="phase-tooltip" id="phaseTooltip" role="status"></div>
+        <div class="keyboard-hint" id="keyboardHint" hidden>
+          <span class="key">←</span>
+          <span>MOVE THE MOON</span>
+          <span class="key">→</span>
+        </div>
+      </div>
+
+      <aside class="fact-card" aria-live="polite">
+        <div class="fact-image" id="factImage" role="img" aria-label="Telescopic photograph of the Moon"></div>
+        <div class="fact-body">
+        <div class="fact-topline">
+          <span>FIELD NOTES</span>
+          <span id="factCounter">01 / 12</span>
+        </div>
+        <div class="fact-level" id="factLevel">STARTER</div>
+        <p class="fact-kicker" id="factKicker">LOOK UP</p>
+        <p class="fact-copy" id="factCopy">The Moon does not make its own light. It reflects sunlight—just like a giant, dusty mirror.</p>
+        <div class="fact-controls">
+          <button id="prevFact" aria-label="Previous fact">←</button>
+          <div class="fact-progress"><i id="factProgress"></i></div>
+          <button id="nextFact" aria-label="Next fact">→</button>
+        </div>
+        </div>
+      </aside>
+
+      <section class="deep-dive" id="deepDive" hidden>
+        <nav class="topic-tabs" id="topicTabs" aria-label="Deep-dive topics"></nav>
+        <article class="topic-card">
+          <div class="topic-copy">
+            <p class="topic-number" id="topicNumber"></p>
+            <h2 id="topicTitle"></h2>
+            <p class="topic-summary" id="topicSummary"></p>
+            <div class="topic-details" id="topicDetails"></div>
+          </div>
+          <div class="topic-visual" id="topicVisual" aria-label="Scientific diagram"></div>
+        </article>
+      </section>
+    </section>
+
+    <section class="phase-strip" id="phaseStrip" aria-label="The eight moon phases"></section>
+
+    <footer>
+      <p>THE MOON TAKES <strong>29.5 DAYS</strong> TO COMPLETE ITS PHASE CYCLE</p>
+      <p class="credit">A SMALL TOUR OF OUR BIG SKY</p>
+    </footer>
+
+    <dialog class="phase-dialog" id="phaseDialog">
+      <button class="dialog-close" id="dialogClose" aria-label="Close phase description">×</button>
+      <p class="dialog-number" id="dialogNumber">PHASE 01</p>
+      <div class="dialog-moon" id="dialogMoon"></div>
+      <h2 id="dialogTitle">New Moon</h2>
+      <p id="dialogDescription"></p>
+    </dialog>
+  </main>
+  <iframe
+    id="musicPlayer"
+    class="music-player"
+    title="Ambient meditation music from YouTube"
+    src="https://www.youtube.com/embed/0cYYiWwilwY?enablejsapi=1&loop=1&playlist=0cYYiWwilwY&controls=0&rel=0"
+    allow="autoplay; encrypted-media"
+  ></iframe>
+  <script src="script.js"></script>
+</body>
+</html>
