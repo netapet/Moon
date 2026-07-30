@@ -102,8 +102,8 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .topic-tab { width: 100%; padding: 18px 10px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--muted); text-align: left; font: 11px/1.4 "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
 .topic-tab span { display: block; margin-bottom: 5px; color: var(--orange); font-size: 8px; }
 .topic-tab.active { color: var(--ink); background: rgba(255,107,53,.08); }
-.topic-card { min-width: 0; display: grid; grid-template-columns: minmax(330px, .9fr) 1.25fr; }
-.topic-copy { padding: clamp(24px, 4vw, 58px); overflow-y: auto; }
+.topic-card { position:relative; min-width:0; min-height:0; display:grid; grid-template-columns:minmax(330px, .9fr) 1.25fr; overflow:hidden; }
+.topic-copy { position:relative; min-height:0; padding:clamp(24px, 4vw, 58px); overflow-y:auto; }
 .topic-number { margin: 0 0 18px; color: var(--orange); font: 9px "DM Mono", monospace; letter-spacing: .16em; }
 .topic-card h2 { margin: 0 0 22px; font: 600 italic clamp(40px, 4.5vw, 68px)/.98 "Playfair Display", serif; color: var(--ink); }
 .topic-summary { margin: 0 0 28px; color: #d0d1cd; font-size: 19px; line-height: 1.65; }
@@ -113,6 +113,9 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .topic-sources::before { content:"Sources: "; color:#8e9494; }
 .topic-sources a { color:#8e9494; text-decoration:none; }
 .topic-sources a:hover, .topic-sources a:focus-visible { color:var(--orange); }
+.origin-video { position:absolute; left:50%; bottom:30px; width:min(calc(100% - 48px), 542px); aspect-ratio:16 / 9; margin:0; transform:translateX(-50%); border:1px solid var(--line); background:#020304; box-shadow:0 12px 35px rgba(0,0,0,.3); overflow:hidden; }
+.origin-video[hidden] { display:none; }
+.origin-video iframe { display:block; width:100%; height:100%; border:0; }
 .eclipse-safety { display:grid; gap:12px; margin-top:22px; padding:14px; border:1px solid rgba(255,107,53,.3); background:rgba(255,107,53,.06); }
 .eclipse-safety[hidden] { display:none; }
 .eclipse-safety img { display:block; width:100%; height:auto; max-height:190px; object-fit:cover; object-position:center; }
@@ -144,8 +147,12 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .collision[data-stage="3"] .origin-cloud { opacity:1; transform:scale(1); }
 .collision[data-stage="4"] .origin-moon { opacity:1; transform:scale(1.08); }
 .origin-controls { position:absolute; left:28px; right:28px; bottom:30px; padding:16px; background:rgba(5,8,10,.82); }
-.origin-controls input { width:100%; accent-color:var(--orange); }
-.origin-labels { display:grid; grid-template-columns:repeat(5,1fr); color:var(--muted); font:7px "DM Mono",monospace; letter-spacing:.06em; text-align:center; }
+.origin-controls input { display:block; width:100%; margin:0; accent-color:var(--orange); }
+.origin-labels { position:relative; height:24px; margin:5px 8px 0; }
+.origin-step { position:absolute; left:var(--step-position); top:0; transform:translateX(-50%); padding:7px 5px 3px; border:0; background:transparent; color:var(--muted); font:7px "DM Mono",monospace; letter-spacing:.06em; text-align:center; white-space:nowrap; }
+.origin-step::before { content:""; position:absolute; left:50%; top:1px; width:3px; height:3px; transform:translateX(-50%); border-radius:50%; background:#747a78; }
+.origin-step:hover, .origin-step:focus-visible, .origin-step.active { color:var(--orange); }
+.origin-step.active::before { background:var(--orange); box-shadow:0 0 7px rgba(255,107,53,.65); }
 .collision .diagram-caption { left:28px; right:28px; bottom:112px; padding:12px 15px; color:var(--ink); background:rgba(5,8,10,.78); border-left:2px solid var(--orange); font-size:10px; text-align:center; }
 .locked .diagram-moon { left:16%; top:50%; transform:translate(-50%,-50%); }
 .tilted .diagram-orbit { --tilt: 5deg; }
@@ -249,6 +256,7 @@ footer strong { color: var(--ink); font-weight: 400; }
   .deep-dive { left: 4vw; top: 85px; bottom: 20px; grid-template-columns: 130px 1fr; }
   .topic-card { grid-template-columns: 1fr; overflow-y: auto; }
   .topic-copy { overflow: visible; }
+  .origin-video { display:none; }
   .topic-visual { min-height: 390px; }
   .phase-strip { justify-content: flex-start; }
 }

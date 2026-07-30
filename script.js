@@ -43,7 +43,7 @@ const topics = [
   {
     short: "Origin", title: "Born from a giant collision",
     summary: "About 4.5 billion years ago, a young world roughly the size of Mars struck the early Earth. Debris blasted into orbit, gathered together, and became our Moon.",
-    details: "<strong>How long did it take?</strong> In traditional debris-disk models, the Moon gathered over months or years; some models take roughly 100 years. A newer high-resolution simulation suggests a large Moon-like body could have formed in only hours. The exact route is still an open scientific question.",
+    details: "<strong>How long did it take?</strong> In traditional debris-disk models, the Moon gathered over months or years; some models take roughly 100 years. A newer high-resolution simulation suggests a large Moon-like body could have formed in just a few hours. The exact route is still an open scientific question.",
     visual: "collision",
     sources: [
       { label: "Nature", url: "https://www.nature.com/articles/38669" },
@@ -407,12 +407,13 @@ function renderTopic(index) {
     link.textContent = source.label;
     sourceList.append(link);
   });
+  document.querySelector("#originVideo").hidden = topic.visual !== "collision";
   document.querySelector("#eclipseSafety").hidden = topic.visual !== "solar-eclipse";
   const visual = document.querySelector("#topicVisual");
   visual.className = `topic-visual ${topic.visual}`;
 
   const diagrams = {
-    collision: `<div class="debris"></div><div class="diagram-earth"></div><div class="diagram-impact"></div><div class="origin-cloud"></div><div class="diagram-moon origin-moon"></div><div class="origin-controls"><input id="originSlider" type="range" min="0" max="4" step="1" value="0" aria-label="Giant impact timeline"><div class="origin-labels"><span>APPROACH</span><span>IMPACT</span><span>DISK</span><span>CLUMPING</span><span>MOON</span></div></div><p class="diagram-caption" id="originCaption">A MARS-SIZED BODY APPROACHES THE YOUNG EARTH</p>`,
+    collision: `<div class="debris"></div><div class="diagram-earth"></div><div class="diagram-impact"></div><div class="origin-cloud"></div><div class="diagram-moon origin-moon"></div><div class="origin-controls"><input id="originSlider" type="range" min="0" max="4" step="1" value="0" aria-label="Giant impact timeline"><div class="origin-labels" aria-label="Formation stages"><button class="origin-step" type="button" data-stage="0" style="--step-position:0%">APPROACH</button><button class="origin-step" type="button" data-stage="1" style="--step-position:25%">IMPACT</button><button class="origin-step" type="button" data-stage="2" style="--step-position:50%">DISK</button><button class="origin-step" type="button" data-stage="3" style="--step-position:75%">CLUMPING</button><button class="origin-step" type="button" data-stage="4" style="--step-position:100%">MOON</button></div></div><p class="diagram-caption" id="originCaption">A MARS-SIZED BODY APPROACHES THE YOUNG EARTH</p>`,
     locked: `<div class="diagram-orbit"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption">ONE ROTATION = ONE ORBIT · THE SAME FACE POINTS INWARD</p>`,
     coldtrap: `<div class="cold-sun"></div><div class="cold-rays"></div><div class="crater-shadow"></div><div class="crater-ground"></div><div class="cold-point"><i></i><strong>−249°C</strong><span>COLD POINT</span></div><p class="crater-rim-label">LOW SUNLIGHT HITS THE RIM</p><p class="diagram-caption">THE CRATER WALL BLOCKS LOW-ANGLE SUNLIGHT · THE FLOOR REMAINS IN SHADOW</p>`,
     tilted: `<div class="diagram-sun"></div><div class="diagram-orbit"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption">THE 5° TILT USUALLY CARRIES THE FULL MOON ABOVE OR BELOW EARTH'S SHADOW</p>`,
@@ -426,6 +427,12 @@ function renderTopic(index) {
   if (topic.visual === "collision") {
     const slider = document.querySelector("#originSlider");
     slider.addEventListener("input", updateOrigin);
+    document.querySelectorAll(".origin-step").forEach(button => {
+      button.addEventListener("click", () => {
+        slider.value = button.dataset.stage;
+        updateOrigin({ target: slider });
+      });
+    });
     updateOrigin({ target: slider });
   }
   if (topic.visual === "solar-eclipse") {
@@ -447,6 +454,11 @@ function updateOrigin(event) {
   ];
   const visual = document.querySelector("#topicVisual");
   visual.dataset.stage = String(stageNumber);
+  document.querySelectorAll(".origin-step").forEach(button => {
+    const active = Number(button.dataset.stage) === stageNumber;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
   document.querySelector("#originCaption").textContent = captions[stageNumber];
 }
 
