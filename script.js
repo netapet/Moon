@@ -138,7 +138,7 @@ const state = {
   fact: 0,
   points: [],
   dpr: 1,
-  sound: true,
+  sound: false,
   hemisphere: "south",
   autoOrbit: false,
   lastFrame: 0,
