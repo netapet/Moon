@@ -29,7 +29,7 @@ const facts = [
   ["STARTER", "SPACE CLOCK", "A complete cycle of phases takes about 29.5 days. This is called a synodic month.", "https://science.nasa.gov/moon/moon-phases/"],
   ["CURIOUS", "LOCKED ON", "The Moon rotates once each orbit, so nearly the same side always faces Earth. This is tidal locking.", "https://science.nasa.gov/moon/tidal-locking/"],
   ["CURIOUS", "NOT A SHADOW", "Moon phases are not caused by Earth’s shadow. Earth’s shadow causes a lunar eclipse.", "https://science.nasa.gov/moon/eclipses/"],
-  ["CURIOUS", "GROWING LIGHT", "Waxing means the bright part we see is growing. Waning means it is shrinking.", "https://science.nasa.gov/moon/moon-phases/"],
+  ["CURIOUS", "MOON CHEESE", "Old fables tell of a hungry animal mistaking the Moon’s reflection in a well for cheese. By 1546, “the Moon is made of green cheese” had become a joke about gullibility. “Green” meant fresh or unaged—not green-coloured.", "https://wehd.com/15/Cheese_sb1.html", "Historical Dictionary"],
   ["CURIOUS", "TWO HIGH TIDES", "The Moon’s gravity helps create ocean tides. Most coasts experience two high tides each lunar day.", "https://science.nasa.gov/moon/tides/"],
   ["DEEP DIVE", "FIVE DEGREES", "The Moon’s orbit is tilted about 5° to Earth’s path around the Sun—which is why eclipses do not happen monthly.", "https://science.nasa.gov/moon/eclipses/"],
   ["DEEP DIVE", "FARTHER AWAY", "The Moon drifts roughly 3.8 centimetres away from Earth each year.", "https://science.nasa.gov/moon/tidal-locking/"],
@@ -53,17 +53,21 @@ const topics = [
   },
   {
     short: "Locked", title: "One face, always watching",
-    summary: "Earth’s gravity raised bulges on the young Moon. Over immense time, that friction slowed its spin until one rotation took exactly as long as one orbit.",
-    details: "<strong>Tidal locking:</strong> The Moon still rotates—it turns once every orbit. That matching rhythm keeps nearly the same hemisphere pointed toward Earth. There is no permanently dark side; the far side receives sunlight too.",
+    summary: "The young Moon spun faster than it does today. Earth’s gravity stretched it slightly, raising a tidal bulge that did not point perfectly toward Earth while the Moon was turning.",
+    details: "<strong>How the lock formed:</strong> Earth’s gravity kept pulling on the misaligned bulge, creating a torque that resisted the Moon’s spin. Repeated flexing inside the Moon converted some of that rotational energy into heat, so its rotation gradually slowed.<br><br><strong>The stable rhythm:</strong> Eventually one rotation took the same time as one orbit around Earth. The bulge could then remain broadly aligned with Earth, and nearly the same lunar hemisphere kept facing us. The Moon still rotates once per orbit—and its far side receives sunlight too, so it is not a permanently dark side.",
     visual: "locked",
     source: "https://science.nasa.gov/moon/tidal-locking/"
   },
   {
     short: "Cold traps", title: "Dark for billions of years",
-    summary: "The far side is not permanently dark—but floors of some deep craters near both lunar poles never receive direct sunlight.",
-    details: "<strong>Polar cold traps:</strong> The Sun always stays very low near the Moon’s poles, so crater rims can block it forever. Hermite Crater near the north pole contains the coldest place measured in the solar system: about −249°C. These shadows may preserve water ice for billions of years.",
+    summary: "The Moon’s axis is tilted only about 1.5° relative to its path around the Sun. Near the poles, that keeps the Sun skimming close to the horizon all year.",
+    details: "<strong>Why the darkness lasts:</strong> Because the Sun never climbs high in the polar sky, the tall rims of deep craters can block its light from reaching the floors. The small axial tilt and the crater shape work together to create permanently shadowed regions—the far side itself is not permanently dark.<br><br><strong>Why the cold stays:</strong> The Moon has only an extremely thin exosphere, not a substantial atmosphere. There is almost no air to circulate warmth from sunlit ground into the shadows, so heat cannot move around the way it does on Earth.<br><br><strong>Polar cold traps:</strong> With no direct sunlight, these floors become extraordinarily cold. Hermite Crater near the north pole contains the coldest place measured in the solar system: about −249°C. Water and other volatile materials that enter these shadows may remain frozen for billions of years.",
     visual: "coldtrap",
-    source: "https://science.nasa.gov/image-detail/hermite/"
+    sources: [
+      { label: "NASA: Polar Shadows", url: "https://science.nasa.gov/resource/shackleton-craters-illuminated-rim-shadowed-interior/" },
+      { label: "NASA: Hermite Crater", url: "https://science.nasa.gov/image-detail/hermite/" },
+      { label: "NASA: Lunar Weather", url: "https://science.nasa.gov/moon/weather-on-the-moon/" }
+    ]
   },
   {
     short: "Impacts", title: "Is the Moon our asteroid shield?",
@@ -81,6 +85,18 @@ const topics = [
     details: "<strong>When to look:</strong> Waxing phases are often visible in the afternoon; waning phases often appear in the morning. A full Moon is mainly opposite the Sun, so it rises near sunset.",
     visual: "daylight",
     source: "https://science.nasa.gov/moon/moon-phases/"
+  },
+  {
+    short: "Moon words", title: "Waxing, waning… gibbous?",
+    summary: "The phase names become much easier once you know the old words hiding inside them: waxing grows, waning fades, and gibbous describes a rounded hump.",
+    details: "<strong>Waxing:</strong> from an old verb meaning “to grow.” The lit portion we see is increasing.<br><br><strong>Waning:</strong> from Old English <em>wanian</em>, “to lessen.” The lit portion is decreasing.<br><br><strong>Gibbous:</strong> from Latin <em>gibbus</em>, “hump.” The Moon looks rounded and is more than half lit.<br><br><strong>In Hebrew:</strong> <span lang=\"he\" dir=\"rtl\">מִתְמַלֵּא</span> means “filling,” <span lang=\"he\" dir=\"rtl\">מִתְמַעֵט</span> means “diminishing,” and <span lang=\"he\" dir=\"rtl\">גַּבְנוּנִי</span> means “hump-shaped.” The gibbous phase is also described plainly as <span lang=\"he\" dir=\"rtl\">כִּמְעַט מָלֵא</span>—“almost full.”<br><br><strong>Memory line:</strong> A waxing gibbous Moon is a hump growing toward full; a waning gibbous Moon is a hump fading from full.",
+    visual: "moon-words",
+    sources: [
+      { label: "Merriam-Webster: Wane", url: "https://www.merriam-webster.com/dictionary/wane" },
+      { label: "Merriam-Webster: Gibbous", url: "https://www.merriam-webster.com/word-of-the-day/gibbous-2022-07-10" },
+      { label: "Israel Space Agency", url: "https://www.space.gov.il/inspiration/159" },
+      { label: "Hebrew Academy", url: "https://terms.hebrew-academy.org.il/munnah?kodErekhIvrit=2920" }
+    ]
   },
   {
     short: "Five degrees", title: "How a full Moon stays bright",
@@ -398,10 +414,11 @@ function renderTopic(index) {
   const diagrams = {
     collision: `<div class="debris"></div><div class="diagram-earth"></div><div class="diagram-impact"></div><div class="origin-cloud"></div><div class="diagram-moon origin-moon"></div><div class="origin-controls"><input id="originSlider" type="range" min="0" max="4" step="1" value="0" aria-label="Giant impact timeline"><div class="origin-labels"><span>APPROACH</span><span>IMPACT</span><span>DISK</span><span>CLUMPING</span><span>MOON</span></div></div><p class="diagram-caption" id="originCaption">A MARS-SIZED BODY APPROACHES THE YOUNG EARTH</p>`,
     locked: `<div class="diagram-orbit"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption">ONE ROTATION = ONE ORBIT · THE SAME FACE POINTS INWARD</p>`,
-    coldtrap: `<p class="diagram-caption">HERMITE CRATER · PERMANENT POLAR SHADOW · COLDEST MEASURED PLACE IN THE SOLAR SYSTEM</p>`,
+    coldtrap: `<div class="cold-sun"></div><div class="cold-rays"></div><div class="crater-shadow"></div><div class="crater-ground"></div><div class="cold-point"><i></i><strong>−249°C</strong><span>COLD POINT</span></div><p class="crater-rim-label">LOW SUNLIGHT HITS THE RIM</p><p class="diagram-caption">THE CRATER WALL BLOCKS LOW-ANGLE SUNLIGHT · THE FLOOR REMAINS IN SHADOW</p>`,
     tilted: `<div class="diagram-sun"></div><div class="diagram-orbit"></div><div class="diagram-earth"></div><div class="diagram-moon" style="left:13%;top:38%"></div><p class="diagram-caption">THE 5° TILT USUALLY CARRIES THE FULL MOON ABOVE OR BELOW EARTH'S SHADOW</p>`,
     impacts: `<div class="diagram-earth"></div><div class="diagram-moon"></div><i class="impact-dot" style="left:8%;top:18%"></i><i class="impact-dot" style="left:28%;top:29%"></i><i class="impact-dot" style="left:72%;top:18%"></i><i class="impact-dot" style="left:84%;top:68%"></i><p class="diagram-caption">SOME OBJECTS HIT THE MOON · MOST TRAJECTORIES NEVER COME CLOSE TO IT</p>`,
     daylight: `<div class="diagram-sun"></div><div class="diagram-moon"></div><p class="diagram-caption">REFLECTED SUNLIGHT FROM THE MOON CAN OUTSHINE THE BLUE DAYTIME SKY</p>`,
+    "moon-words": `<div class="word-stack"><div class="word-row"><i class="word-moon waxing-word"></i><div><strong>WAXING</strong><span>WAX = GROW</span><b class="hebrew-word" lang="he" dir="rtl">מִתְמַלֵּא</b></div></div><div class="word-row"><i class="word-moon gibbous-word"></i><div><strong>GIBBOUS</strong><span>GIBBUS = HUMP</span><b class="hebrew-word" lang="he" dir="rtl">גַּבְנוּנִי</b></div></div><div class="word-row"><i class="word-moon waning-word"></i><div><strong>WANING</strong><span>WANE = FADE</span><b class="hebrew-word" lang="he" dir="rtl">מִתְמַעֵט</b></div></div></div><p class="word-memory">WAXING GIBBOUS = A HUMP GROWING TOWARD FULL</p>`,
     "solar-eclipse": `<div class="diagram-sun"></div><div class="eclipse-axis"></div><div class="eclipse-orbit"></div><div class="solar-shadow"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption" id="eclipseCaption">CROSSING THE SUN–EARTH LINE · THE SHADOW REACHES EARTH</p><div class="eclipse-controls"><button id="eclipseToggle" type="button" aria-pressed="false">SHOW 5° MISS</button></div>`,
     "lunar-eclipse": `<div class="diagram-sun"></div><div class="lunar-shadow"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption">SUN → EARTH → MOON · EARTH CASTS ITS SHADOW ON THE MOON</p>`
   };
@@ -476,14 +493,16 @@ function showFact(index) {
   state.fact = (index + totalSlides) % totalSlides;
   const factIndex = Math.floor(state.fact / 2);
   const pictureOnly = state.fact % 2 === 1;
-  const [level, kicker, copy, sourceUrl] = facts[factIndex];
+  const [level, kicker, copy, sourceUrl, sourceName = "NASA"] = facts[factIndex];
   const card = document.querySelector(".fact-card");
   card.classList.toggle("picture-only", pictureOnly);
   card.classList.toggle("text-only", !pictureOnly);
   document.querySelector("#factLevel").textContent = level;
   document.querySelector("#factKicker").textContent = kicker;
   document.querySelector("#factCopy").textContent = copy;
-  document.querySelector("#factSource").href = sourceUrl;
+  const factSource = document.querySelector("#factSource");
+  factSource.href = sourceUrl;
+  factSource.textContent = `Source: ${sourceName}`;
   const imageLabels = [
     "The Moon and Earth in a star field", "A close view of Tycho crater", "Galileo observing the Moon",
     "A playful smiling cratered Moon", "An Apollo-era astronaut on the lunar surface", "A mouse discovering the Moon is not cheese",
@@ -491,8 +510,9 @@ function showFact(index) {
   ];
   const picture = document.querySelector("#factImage");
   if (pictureOnly) {
-    picture.style.backgroundImage = `url("${factImagePaths[factIndex % 9]}")`;
-    picture.setAttribute("aria-label", imageLabels[factIndex % 9]);
+    const imageIndex = factIndex === 6 ? 8 : factIndex % 9;
+    picture.style.backgroundImage = `url("${factImagePaths[imageIndex]}")`;
+    picture.setAttribute("aria-label", imageLabels[imageIndex]);
   }
   document.querySelector("#factCounter").textContent = `${String(state.fact + 1).padStart(2, "0")} / ${totalSlides}`;
   document.querySelector("#factProgress").style.width = `${((state.fact + 1) / totalSlides) * 100}%`;

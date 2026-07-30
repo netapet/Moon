@@ -117,11 +117,32 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .daylight { background: linear-gradient(#4d9bd1, #9ed3ea); }
 .daylight .diagram-moon { left: 26%; top: 22%; width: 78px; height: 78px; }
 .daylight .diagram-sun { right: -70px; }
+.moon-words { display:grid; place-items:center; align-content:center; gap:24px; padding:34px; background:radial-gradient(circle at 50% 45%, #213039, #070b0e 72%); }
+.word-stack { width:min(390px, 92%); display:grid; gap:12px; }
+.word-row { display:grid; grid-template-columns:64px 1fr; gap:18px; align-items:center; padding:13px 16px; border:1px solid rgba(245,241,232,.12); background:rgba(5,8,10,.52); }
+.word-row div { display:flex; justify-content:space-between; align-items:baseline; gap:15px; }
+.word-row strong { color:var(--ink); font:600 italic 23px "Playfair Display",serif; }
+.word-row span { color:var(--orange); font:8px "DM Mono",monospace; letter-spacing:.12em; }
+.hebrew-word { margin-left:auto; color:#c5c7c3; font:500 15px Arial,sans-serif; white-space:nowrap; }
+.word-moon { position:relative; width:48px; height:48px; overflow:hidden; border-radius:50%; background:#d9d8d0; box-shadow:0 0 18px rgba(230,230,216,.12); }
+.word-moon::after { content:""; position:absolute; inset:-1px; border-radius:50%; background:#111619; }
+.waxing-word::after { transform:translateX(-16px); }
+.gibbous-word::after { transform:translateX(-34px); }
+.waning-word::after { transform:translateX(16px); }
+.word-memory { width:min(390px, 92%); margin:0; padding:13px 16px; border-left:2px solid var(--orange); background:rgba(255,107,53,.07); color:#c5c7c3; font:9px/1.6 "DM Mono",monospace; letter-spacing:.08em; text-align:center; }
 .impacts .diagram-moon { right: 14%; top: 43%; }
 .impact-dot { position:absolute; width:8px; height:8px; border-radius:50%; background:var(--orange); box-shadow:0 0 12px var(--orange); }
-.coldtrap { background:radial-gradient(circle at 65% 24%, #54616a, #11171b 35%, #020405 76%); }
-.coldtrap::before { content:""; position:absolute; width:78%; height:70%; left:8%; top:23%; border-radius:50%; background:radial-gradient(ellipse at 58% 20%, #78848a 0 9%, #20282d 10% 28%, #020304 29% 54%, #12181c 55%); transform:rotate(-9deg); box-shadow:inset 0 0 45px #000; }
-.coldtrap::after { content:"−249°C"; position:absolute; left:50%; top:48%; transform:translate(-50%,-50%); color:#bde9ff; font:500 24px "DM Mono",monospace; text-shadow:0 0 18px #4dc8ff; }
+.coldtrap { background:linear-gradient(#05090c 0 54%, #11171b 54%); }
+.cold-sun { position:absolute; left:-58px; top:34%; width:112px; height:112px; border-radius:50%; background:#fff0b1; box-shadow:0 0 55px 26px rgba(255,112,46,.22); }
+.cold-rays { position:absolute; z-index:0; left:0; top:29%; width:52%; height:205px; transform:rotate(2deg); transform-origin:left center; background:linear-gradient(90deg,rgba(255,205,129,.34),rgba(255,205,129,.06)); clip-path:polygon(0 36%,100% 2%,100% 98%,0 64%); }
+.crater-ground { position:absolute; z-index:2; inset:0; background:linear-gradient(160deg,#677077,#252c30 45%,#0b1013 78%); clip-path:polygon(0 52%,31% 51%,39% 55%,49% 83%,61% 56%,70% 51%,100% 50%,100% 100%,0 100%); box-shadow:inset 0 -45px 65px rgba(0,0,0,.55); }
+.crater-shadow { position:absolute; z-index:3; left:39%; top:51%; width:24%; height:34%; background:linear-gradient(145deg,rgba(1,3,4,.25),#010203 50%); clip-path:polygon(0 0,100% 12%,88% 100%,43% 94%); }
+.cold-point { position:absolute; z-index:4; left:49%; top:75%; transform:translate(-50%,-50%); display:grid; justify-items:center; color:#bde9ff; text-align:center; }
+.cold-point i { width:8px; height:8px; margin-bottom:7px; border-radius:50%; background:#bde9ff; box-shadow:0 0 15px 5px rgba(77,200,255,.52); }
+.cold-point strong { font:500 22px "DM Mono",monospace; text-shadow:0 0 18px #4dc8ff; }
+.cold-point span, .crater-rim-label { color:#8ea5ae; font:7px "DM Mono",monospace; letter-spacing:.12em; }
+.crater-rim-label { position:absolute; z-index:4; left:27%; top:47%; margin:0; color:#d0a26e; }
+.coldtrap .diagram-caption { z-index:5; padding:10px 12px; background:rgba(3,6,8,.72); text-align:center; }
 .solar-eclipse .diagram-earth { left:20%; }
 .solar-eclipse .diagram-moon { left:65%; top:calc(50% - 22px); transform:translateX(-50%); transition:left .45s ease, transform .45s ease; }
 .solar-shadow { position:absolute; left:18%; top:calc(50% - 22px); width:47%; height:44px; transform-origin:right center; background:linear-gradient(90deg,transparent,rgba(0,0,0,.93)); clip-path:polygon(0 43%,100% 0,100% 100%,0 57%); transition:width .45s ease, transform .45s ease; }
