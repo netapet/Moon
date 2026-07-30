@@ -60,6 +60,7 @@
         <div class="fact-level" id="factLevel">STARTER</div>
         <p class="fact-kicker" id="factKicker">LOOK UP</p>
         <p class="fact-copy" id="factCopy">The Moon does not make its own light. It reflects sunlight—just like a giant, dusty mirror.</p>
+        <a class="fact-source" id="factSource" href="https://science.nasa.gov/moon/moon-phases/" target="_blank" rel="noopener noreferrer">Source: NASA</a>
         <div class="fact-controls">
           <button id="prevFact" aria-label="Previous fact">←</button>
           <div class="fact-progress"><i id="factProgress"></i></div>
@@ -76,6 +77,15 @@
             <h2 id="topicTitle"></h2>
             <p class="topic-summary" id="topicSummary"></p>
             <div class="topic-details" id="topicDetails"></div>
+            <div class="topic-sources" id="topicSources" aria-label="Sources"></div>
+            <aside class="eclipse-safety" id="eclipseSafety" hidden>
+              <div>
+                <strong>Protect your eyes</strong>
+                <p>Always use ISO 12312-2 eclipse glasses when looking toward the Sun. Ordinary sunglasses are not safe.</p>
+                <a href="https://science.nasa.gov/eclipses/safety/" target="_blank" rel="noopener noreferrer">NASA safety guide</a>
+              </div>
+              <img src="assets/eclipse-glasses.png" alt="Specialized solar eclipse viewing glasses">
+            </aside>
           </div>
           <div class="topic-visual" id="topicVisual" aria-label="Scientific diagram"></div>
         </article>

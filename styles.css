@@ -58,7 +58,8 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .fact-card.picture-only .fact-topline,
 .fact-card.picture-only .fact-level,
 .fact-card.picture-only .fact-kicker,
-.fact-card.picture-only .fact-copy { visibility: hidden; }
+.fact-card.picture-only .fact-copy,
+.fact-card.picture-only .fact-source { visibility: hidden; }
 .fact-controls { position: absolute; left: 26px; right: 26px; bottom: 20px; }
 .deep-dive { position: absolute; z-index: 4; left: 10vw; right: 2.5vw; top: 2.5vh; bottom: 2.5vh; display: grid; grid-template-columns: 185px 1fr; border: 1px solid var(--line); background: rgba(8,13,16,.91); backdrop-filter: blur(16px); }
 .deep-dive[hidden] { display: none; }
@@ -73,6 +74,17 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .topic-summary { margin: 0 0 28px; color: #d0d1cd; font-size: 19px; line-height: 1.65; }
 .topic-details { padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.75; }
 .topic-details strong { color: var(--orange); font-weight: 600; }
+.topic-sources { margin-top:18px; color:#636b6a; font:8px "DM Mono",monospace; letter-spacing:.1em; text-transform:uppercase; }
+.topic-sources::before { content:"Sources: "; color:#8e9494; }
+.topic-sources a { color:#8e9494; text-decoration:none; }
+.topic-sources a:hover, .topic-sources a:focus-visible { color:var(--orange); }
+.eclipse-safety { display:grid; gap:12px; margin-top:22px; padding:14px; border:1px solid rgba(255,107,53,.3); background:rgba(255,107,53,.06); }
+.eclipse-safety[hidden] { display:none; }
+.eclipse-safety img { display:block; width:100%; height:auto; max-height:190px; object-fit:cover; object-position:center; }
+.eclipse-safety strong { display:block; margin-bottom:5px; color:var(--orange); font:9px "DM Mono",monospace; letter-spacing:.12em; text-transform:uppercase; }
+.eclipse-safety p { margin:0; color:#c5c7c3; font-size:11px; line-height:1.45; }
+.eclipse-safety a { display:inline-block; margin-top:6px; color:#8e9494; font:7px "DM Mono",monospace; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; }
+.eclipse-safety a:hover, .eclipse-safety a:focus-visible { color:var(--orange); }
 .topic-visual { position: relative; min-height: 420px; overflow: hidden; background: radial-gradient(circle at 50% 50%, #1b2d36, #070b0e 70%); }
 .diagram-earth, .diagram-moon, .diagram-sun, .diagram-impact { position: absolute; border-radius: 50%; }
 .diagram-earth { width: 116px; height: 116px; left: 50%; top: 50%; transform: translate(-50%,-50%); background: radial-gradient(circle at 35% 30%, #6ed7ff, #1477aa 45%, #073753 80%); box-shadow: 0 0 35px rgba(61,174,222,.3); }
@@ -111,8 +123,16 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .coldtrap::before { content:""; position:absolute; width:78%; height:70%; left:8%; top:23%; border-radius:50%; background:radial-gradient(ellipse at 58% 20%, #78848a 0 9%, #20282d 10% 28%, #020304 29% 54%, #12181c 55%); transform:rotate(-9deg); box-shadow:inset 0 0 45px #000; }
 .coldtrap::after { content:"−249°C"; position:absolute; left:50%; top:48%; transform:translate(-50%,-50%); color:#bde9ff; font:500 24px "DM Mono",monospace; text-shadow:0 0 18px #4dc8ff; }
 .solar-eclipse .diagram-earth { left:20%; }
-.solar-eclipse .diagram-moon { left:55%; top:calc(50% - 22px); }
-.solar-shadow { position:absolute; left:18%; top:calc(50% - 22px); width:38%; height:44px; background:linear-gradient(90deg,transparent,rgba(0,0,0,.93)); clip-path:polygon(0 43%,100% 0,100% 100%,0 57%); }
+.solar-eclipse .diagram-moon { left:65%; top:calc(50% - 22px); transform:translateX(-50%); transition:left .45s ease, transform .45s ease; }
+.solar-shadow { position:absolute; left:18%; top:calc(50% - 22px); width:47%; height:44px; transform-origin:right center; background:linear-gradient(90deg,transparent,rgba(0,0,0,.93)); clip-path:polygon(0 43%,100% 0,100% 100%,0 57%); transition:width .45s ease, transform .45s ease; }
+.eclipse-axis { position:absolute; z-index:0; left:10%; right:4%; top:50%; border-top:1px solid rgba(255,190,130,.1); }
+.eclipse-orbit { position:absolute; z-index:0; left:20%; top:50%; width:90%; height:46%; transform:translate(-50%,-50%); border:1px dashed rgba(245,241,232,.15); border-radius:50%; }
+.solar-eclipse[data-alignment="miss"] .diagram-moon { left:55%; transform:translate(-50%,-58px); }
+.solar-eclipse[data-alignment="miss"] .solar-shadow { width:37%; transform:translateY(-58px) rotate(5deg); }
+.eclipse-controls { position:absolute; z-index:2; left:28px; right:28px; bottom:28px; text-align:center; }
+.eclipse-controls button { padding:11px 18px; border:1px solid rgba(255,107,53,.45); background:rgba(5,8,10,.86); color:var(--orange); font:8px "DM Mono",monospace; letter-spacing:.12em; }
+.eclipse-controls button:hover, .eclipse-controls button:focus-visible { border-color:var(--orange); background:rgba(255,107,53,.1); }
+.solar-eclipse .diagram-caption { bottom:105px; color:var(--ink); text-align:center; }
 .lunar-eclipse .diagram-earth { left:53%; }
 .lunar-eclipse .diagram-moon { left:17%; top:calc(50% - 22px); filter:sepia(1) saturate(2) hue-rotate(325deg); }
 .lunar-shadow { position:absolute; left:17%; top:calc(50% - 58px); width:37%; height:116px; background:linear-gradient(90deg,rgba(25,0,0,.86),rgba(0,0,0,.93)); clip-path:polygon(0 31%,100% 0,100% 100%,0 69%); }
@@ -125,6 +145,8 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .fact-level { display: inline-block; margin-top: 18px; padding: 5px 7px; background: var(--orange); color: #101318; font: 500 8px "DM Mono", monospace; letter-spacing: .15em; }
 .fact-kicker { font: 500 10px "DM Mono", monospace; letter-spacing: .15em; margin: 21px 0 8px; color: var(--orange); }
 .fact-copy { min-height: 70px; font-size: 14px; line-height: 1.5; margin: 0; }
+.fact-source { display: inline-block; margin-top: 10px; color: #8e9494; font: 8px "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
+.fact-source:hover, .fact-source:focus-visible { color: var(--orange); }
 .fact-controls { display: grid; grid-template-columns: 30px 1fr 30px; align-items: center; gap: 10px; margin-top: 20px; }
 .fact-controls button { border: 0; background: none; color: var(--muted); padding: 5px; }
 .fact-progress { height: 1px; background: var(--line); }
@@ -148,8 +170,8 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 footer { height: 68px; display: flex; justify-content: space-between; align-items: center; padding: 0 4vw; border-top: 1px solid var(--line); color: #777e7d; font: 8px "DM Mono", monospace; letter-spacing: .16em; }
 footer strong { color: var(--ink); font-weight: 400; }
 .credit { color: var(--orange); }
-.phase-dialog { width: min(390px, calc(100vw - 32px)); padding: 35px; color: var(--ink); background: #11171b; border: 1px solid rgba(245,241,232,.25); box-shadow: 0 30px 100px #000; text-align: center; }
-.phase-dialog::backdrop { background: rgba(2,5,7,.72); backdrop-filter: blur(5px); }
+.phase-dialog { width: min(390px, calc(100vw - 32px)); padding: 35px; color: var(--ink); background: rgba(17,23,27,.94); border: 1px solid rgba(245,241,232,.14); box-shadow: 0 18px 55px rgba(0,0,0,.45); text-align: center; }
+.phase-dialog::backdrop { background: rgba(2,5,7,.38); }
 .dialog-close { position: absolute; right: 12px; top: 9px; border: 0; background: transparent; color: var(--muted); font-size: 25px; }
 .dialog-number, .dialog-tip { font: 8px "DM Mono", monospace; letter-spacing: .16em; color: var(--orange); }
 .dialog-tip { color: var(--muted); margin: 25px 0 0; }

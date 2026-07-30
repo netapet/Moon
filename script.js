@@ -1,3 +1,4 @@
+// Cache the primary canvas and interface elements used throughout the experience.
 const canvas = document.querySelector("#spaceCanvas");
 const ctx = canvas.getContext("2d");
 const stage = document.querySelector("#spaceStage");
@@ -5,6 +6,7 @@ const tooltip = document.querySelector("#phaseTooltip");
 const phaseStrip = document.querySelector("#phaseStrip");
 const keyboardHint = document.querySelector("#keyboardHint");
 
+// Define the eight lunar phases and the copy shown in the phase dialog.
 const phaseNames = [
   "New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous",
   "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent"
@@ -20,72 +22,90 @@ const phaseDescriptions = [
   "Only a thin curve remains before new Moon. Look east shortly before sunrise to spot it."
 ];
 
+// Supply the rotating educational facts displayed in Phase Atlas.
 const facts = [
-  ["STARTER", "LOOK UP", "The Moon does not make its own light. It reflects sunlight—just like a giant, dusty mirror."],
-  ["STARTER", "SAME MOON", "Everyone on Earth sees the same lunar phase, although the Moon can look rotated in different hemispheres."],
-  ["STARTER", "SPACE CLOCK", "A complete cycle of phases takes about 29.5 days. This is called a synodic month."],
-  ["CURIOUS", "LOCKED ON", "The Moon rotates once each orbit, so nearly the same side always faces Earth. This is tidal locking."],
-  ["CURIOUS", "NOT A SHADOW", "Moon phases are not caused by Earth’s shadow. Earth’s shadow causes a lunar eclipse."],
-  ["CURIOUS", "GROWING LIGHT", "Waxing means the bright part we see is growing. Waning means it is shrinking."],
-  ["CURIOUS", "TWO HIGH TIDES", "The Moon’s gravity helps create ocean tides. Most coasts experience two high tides each lunar day."],
-  ["DEEP DIVE", "FIVE DEGREES", "The Moon’s orbit is tilted about 5° to Earth’s path around the Sun—which is why eclipses do not happen monthly."],
-  ["DEEP DIVE", "FARTHER AWAY", "The Moon drifts roughly 3.8 centimetres away from Earth each year."],
-  ["DEEP DIVE", "A LONG DAY", "Sunrise to sunrise on the Moon takes about 29.5 Earth days, making each lunar daytime roughly two weeks long."],
-  ["WOW", "SMALLER SUN", "The Sun is about 400 times wider than the Moon—and also about 400 times farther away. That is why total eclipses fit so neatly."],
-  ["WOW", "OLD FOOTPRINTS", "With almost no wind or rain, astronaut footprints on the Moon may remain for millions of years."]
+  ["STARTER", "LOOK UP", "The Moon does not make its own light. It reflects sunlight—just like a giant, dusty mirror.", "https://science.nasa.gov/moon/moon-phases/"],
+  ["STARTER", "SAME MOON", "Everyone on Earth sees the same lunar phase, although the Moon can look rotated in different hemispheres.", "https://science.nasa.gov/moon/moon-phases/"],
+  ["STARTER", "SPACE CLOCK", "A complete cycle of phases takes about 29.5 days. This is called a synodic month.", "https://science.nasa.gov/moon/moon-phases/"],
+  ["CURIOUS", "LOCKED ON", "The Moon rotates once each orbit, so nearly the same side always faces Earth. This is tidal locking.", "https://science.nasa.gov/moon/tidal-locking/"],
+  ["CURIOUS", "NOT A SHADOW", "Moon phases are not caused by Earth’s shadow. Earth’s shadow causes a lunar eclipse.", "https://science.nasa.gov/moon/eclipses/"],
+  ["CURIOUS", "GROWING LIGHT", "Waxing means the bright part we see is growing. Waning means it is shrinking.", "https://science.nasa.gov/moon/moon-phases/"],
+  ["CURIOUS", "TWO HIGH TIDES", "The Moon’s gravity helps create ocean tides. Most coasts experience two high tides each lunar day.", "https://science.nasa.gov/moon/tides/"],
+  ["DEEP DIVE", "FIVE DEGREES", "The Moon’s orbit is tilted about 5° to Earth’s path around the Sun—which is why eclipses do not happen monthly.", "https://science.nasa.gov/moon/eclipses/"],
+  ["DEEP DIVE", "FARTHER AWAY", "The Moon drifts roughly 3.8 centimetres away from Earth each year.", "https://science.nasa.gov/moon/tidal-locking/"],
+  ["DEEP DIVE", "A LONG DAY", "Sunrise to sunrise on the Moon takes about 29.5 Earth days, making each lunar daytime roughly two weeks long.", "https://science.nasa.gov/moon/facts/"],
+  ["WOW", "SMALLER SUN", "The Sun is about 400 times wider than the Moon—and also about 400 times farther away. That is why total eclipses fit so neatly.", "https://science.nasa.gov/eclipses/geometry/"],
+  ["WOW", "OLD FOOTPRINTS", "With almost no wind or rain, astronaut footprints on the Moon may remain for millions of years.", "https://starchild.gsfc.nasa.gov/docs/StarChild/space_level1/apollo11.html"]
 ];
 
+// Define the ordered Deep Dive chapters and their matching visual treatments.
 const topics = [
   {
     short: "Origin", title: "Born from a giant collision",
     summary: "About 4.5 billion years ago, a young world roughly the size of Mars struck the early Earth. Debris blasted into orbit, gathered together, and became our Moon.",
     details: "<strong>How long did it take?</strong> In traditional debris-disk models, the Moon gathered over months or years; some models take roughly 100 years. A newer high-resolution simulation suggests a large Moon-like body could have formed in only hours. The exact route is still an open scientific question.",
-    visual: "collision"
+    visual: "collision",
+    sources: [
+      { label: "Nature", url: "https://www.nature.com/articles/38669" },
+      { label: "ApJ", url: "https://doi.org/10.1088/0004-637X/760/1/83" },
+      { label: "ApJ Letters", url: "https://doi.org/10.3847/2041-8213/ac8d96" }
+    ]
   },
   {
     short: "Locked", title: "One face, always watching",
     summary: "Earth’s gravity raised bulges on the young Moon. Over immense time, that friction slowed its spin until one rotation took exactly as long as one orbit.",
     details: "<strong>Tidal locking:</strong> The Moon still rotates—it turns once every orbit. That matching rhythm keeps nearly the same hemisphere pointed toward Earth. There is no permanently dark side; the far side receives sunlight too.",
-    visual: "locked"
+    visual: "locked",
+    source: "https://science.nasa.gov/moon/tidal-locking/"
   },
   {
     short: "Cold traps", title: "Dark for billions of years",
     summary: "The far side is not permanently dark—but floors of some deep craters near both lunar poles never receive direct sunlight.",
     details: "<strong>Polar cold traps:</strong> The Sun always stays very low near the Moon’s poles, so crater rims can block it forever. Hermite Crater near the north pole contains the coldest place measured in the solar system: about −249°C. These shadows may preserve water ice for billions of years.",
-    visual: "coldtrap"
+    visual: "coldtrap",
+    source: "https://science.nasa.gov/image-detail/hermite/"
   },
   {
-    short: "Five degrees", title: "How a full Moon stays bright",
-    summary: "At full Moon, Earth is between the Sun and Moon in the broad sense—but the three bodies are usually not lined up precisely.",
-    details: "<strong>The five-degree escape:</strong> The Moon’s orbit is tilted about 5° to Earth’s orbital plane. Most months the full Moon passes above or below Earth’s shadow, so sunlight reaches it. Precise alignment produces a lunar eclipse.",
-    visual: "tilted"
-  },
-  {
-    short: "Impacts", title: "Is the Moon our shield?",
+    short: "Impacts", title: "Is the Moon our asteroid shield?",
     summary: "The cratered Moon has intercepted countless space rocks, but it is too small and far away to act as a reliable shield for Earth.",
     details: "<strong>The bigger protection:</strong> The Moon’s gravity helps stabilize Earth’s axial tilt, supporting a more stable long-term climate. Its craters also preserve a valuable record of impacts in our neighbourhood.",
-    visual: "impacts"
+    visual: "impacts",
+    sources: [
+      { label: "Advances in Space Research", url: "https://doi.org/10.1016/S0273-1177(03)00459-9" },
+      { label: "Nature", url: "https://www.nature.com/articles/361615a0" }
+    ]
   },
   {
     short: "Day Moon", title: "Why it appears in daylight",
     summary: "The Moon spends almost as much time above the horizon during daytime as at night. It is large and bright enough for reflected sunlight to stand out against the blue sky.",
     details: "<strong>When to look:</strong> Waxing phases are often visible in the afternoon; waning phases often appear in the morning. A full Moon is mainly opposite the Sun, so it rises near sunset.",
-    visual: "daylight"
+    visual: "daylight",
+    source: "https://science.nasa.gov/moon/moon-phases/"
+  },
+  {
+    short: "Five degrees", title: "How a full Moon stays bright",
+    summary: "At full Moon, Earth is between the Sun and Moon in the broad sense—but the three bodies are usually not lined up precisely.",
+    details: "<strong>The five-degree escape:</strong> The Moon’s orbit is tilted about 5° to Earth’s orbital plane. Most months the full Moon passes above or below Earth’s shadow, so sunlight reaches it. Precise alignment produces a lunar eclipse.",
+    visual: "tilted",
+    source: "https://science.nasa.gov/moon/eclipses/"
   },
   {
     short: "Solar eclipse", title: "The Moon’s shadow reaches Earth",
     summary: "During a solar eclipse, the Moon passes between the Sun and Earth. Its narrow shadow falls onto a small part of Earth’s surface.",
     details: "<strong>From Earth:</strong> People inside the darkest central shadow, the umbra, can see a total eclipse. People in the lighter penumbra see a partial eclipse. The 5° orbital tilt makes this precise alignment uncommon.",
-    visual: "solar-eclipse"
+    visual: "solar-eclipse",
+    source: "https://science.nasa.gov/eclipses/geometry/"
   },
   {
     short: "Lunar eclipse", title: "Earth’s shadow reaches the Moon",
     summary: "During a lunar eclipse, Earth passes between the Sun and the full Moon. Earth’s shadow extends away from the Sun and the Moon travels through it.",
-    details: "<strong>Why the Moon turns red:</strong> Earth’s atmosphere bends filtered red sunlight into the shadow. Unlike a solar eclipse, a lunar eclipse can be seen from the entire night side of Earth.",
-    visual: "lunar-eclipse"
+    details: "<strong>Lunar eclipse vs new Moon:</strong> A lunar eclipse happens at full Moon, when Earth sits between the Sun and Moon and casts its shadow onto the Moon. At new Moon, the order is reversed—the Moon sits between Earth and the Sun, so its unlit side faces us.<br><br><strong>Why the Moon turns red:</strong> Earth’s atmosphere bends filtered red sunlight into the shadow. Unlike a solar eclipse, a lunar eclipse can be seen from the entire night side of Earth.",
+    visual: "lunar-eclipse",
+    source: "https://science.nasa.gov/moon/eclipses/"
   }
 ];
 
+// Build the ordered paths for the fact-card image sequence.
 const factImagePaths = Array.from(
   { length: 9 },
   (_, index) => `assets/moon-pics/pic-${String(index + 1).padStart(2, "0")}.png`
@@ -95,6 +115,7 @@ factImagePaths.forEach(path => {
   image.src = path;
 });
 
+// Hold the current mode, selection, animation, and viewing preferences.
 const state = {
   mode: "atlas",
   orbitAngle: Math.PI,
@@ -108,6 +129,7 @@ const state = {
   topic: 0
 };
 
+/** Resize the canvas to match its displayed size and redraw the scene. */
 function resize() {
   const box = stage.getBoundingClientRect();
   state.dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -118,6 +140,7 @@ function resize() {
   draw();
 }
 
+/** Paint a deterministic field of stars across the canvas. */
 function starfield(w, h) {
   const seed = (n) => {
     const x = Math.sin(n * 127.1) * 43758.5453;
@@ -132,6 +155,7 @@ function starfield(w, h) {
   }
 }
 
+/** Draw the Moon's orbital path around Earth. */
 function drawOrbit(cx, cy, rx, ry) {
   ctx.save();
   ctx.strokeStyle = "rgba(226,232,225,.17)";
@@ -141,6 +165,7 @@ function drawOrbit(cx, cy, rx, ry) {
   ctx.restore();
 }
 
+/** Render a shaded Earth or Moon sphere for the current lighting angle. */
 function sphere(x, y, radius, kind, lightDirection = 1, phaseAngle = 0) {
   const size = radius * 2;
   const image = ctx.createImageData(size, size);
@@ -186,6 +211,7 @@ function sphere(x, y, radius, kind, lightDirection = 1, phaseAngle = 0) {
   ctx.drawImage(buffer, Math.round(x - radius), Math.round(y - radius), size, size);
 }
 
+/** Draw Earth with ocean, land, atmosphere, and location marker details. */
 function drawEarth(x, y, radius) {
   ctx.save();
   ctx.shadowColor = "rgba(43,151,213,.42)";
@@ -222,6 +248,7 @@ function drawEarth(x, y, radius) {
   earthLabel.style.top = `${markerY}px`;
 }
 
+/** Draw the Sun and its glow at the edge of the scene. */
 function drawSun(w, h) {
   const x = w + 65;
   const y = h * .43;
@@ -234,6 +261,7 @@ function drawSun(w, h) {
   ctx.fillStyle = "#fff3c3"; ctx.beginPath(); ctx.arc(x, y, 105, 0, Math.PI * 2); ctx.fill();
 }
 
+/** Render the complete orbital scene for the active mode and viewport. */
 function draw() {
   const w = canvas.width / state.dpr;
   const h = canvas.height / state.dpr;
@@ -288,12 +316,14 @@ function draw() {
   }
 }
 
+/** Convert an orbital angle into its nearest lunar-phase index. */
 function phaseAtAngle(a) {
   const normalized = ((a + Math.PI * 2) % (Math.PI * 2));
   const index = Math.round(normalized / (Math.PI / 4)) % 8;
   return phaseNames[index];
 }
 
+/** Switch modes and synchronize the related controls, copy, and panels. */
 function setMode(mode) {
   state.mode = mode;
   document.querySelectorAll(".mode-button").forEach(btn => {
@@ -330,6 +360,7 @@ phaseNames.forEach((name, i) => {
   phaseStrip.appendChild(chip);
 });
 
+// Generate the Deep Dive navigation from the ordered topic data.
 const topicTabs = document.querySelector("#topicTabs");
 topics.forEach((topic, index) => {
   const button = document.createElement("button");
@@ -339,6 +370,7 @@ topics.forEach((topic, index) => {
   topicTabs.appendChild(button);
 });
 
+/** Display a Deep Dive chapter and its corresponding diagram. */
 function renderTopic(index) {
   state.topic = index;
   const topic = topics[index];
@@ -347,6 +379,19 @@ function renderTopic(index) {
   document.querySelector("#topicTitle").textContent = topic.title;
   document.querySelector("#topicSummary").textContent = topic.summary;
   document.querySelector("#topicDetails").innerHTML = topic.details;
+  const sources = topic.sources || [{ label: "NASA", url: topic.source }];
+  const sourceList = document.querySelector("#topicSources");
+  sourceList.replaceChildren();
+  sources.forEach((source, sourceIndex) => {
+    if (sourceIndex > 0) sourceList.append(" · ");
+    const link = document.createElement("a");
+    link.href = source.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = source.label;
+    sourceList.append(link);
+  });
+  document.querySelector("#eclipseSafety").hidden = topic.visual !== "solar-eclipse";
   const visual = document.querySelector("#topicVisual");
   visual.className = `topic-visual ${topic.visual}`;
 
@@ -357,7 +402,7 @@ function renderTopic(index) {
     tilted: `<div class="diagram-sun"></div><div class="diagram-orbit"></div><div class="diagram-earth"></div><div class="diagram-moon" style="left:13%;top:38%"></div><p class="diagram-caption">THE 5° TILT USUALLY CARRIES THE FULL MOON ABOVE OR BELOW EARTH'S SHADOW</p>`,
     impacts: `<div class="diagram-earth"></div><div class="diagram-moon"></div><i class="impact-dot" style="left:8%;top:18%"></i><i class="impact-dot" style="left:28%;top:29%"></i><i class="impact-dot" style="left:72%;top:18%"></i><i class="impact-dot" style="left:84%;top:68%"></i><p class="diagram-caption">SOME OBJECTS HIT THE MOON · MOST TRAJECTORIES NEVER COME CLOSE TO IT</p>`,
     daylight: `<div class="diagram-sun"></div><div class="diagram-moon"></div><p class="diagram-caption">REFLECTED SUNLIGHT FROM THE MOON CAN OUTSHINE THE BLUE DAYTIME SKY</p>`,
-    "solar-eclipse": `<div class="diagram-sun"></div><div class="solar-shadow"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption">SUN → MOON → EARTH · THE MOON CASTS ITS SHADOW ON EARTH</p>`,
+    "solar-eclipse": `<div class="diagram-sun"></div><div class="eclipse-axis"></div><div class="eclipse-orbit"></div><div class="solar-shadow"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption" id="eclipseCaption">CROSSING THE SUN–EARTH LINE · THE SHADOW REACHES EARTH</p><div class="eclipse-controls"><button id="eclipseToggle" type="button" aria-pressed="false">SHOW 5° MISS</button></div>`,
     "lunar-eclipse": `<div class="diagram-sun"></div><div class="lunar-shadow"></div><div class="diagram-earth"></div><div class="diagram-moon"></div><p class="diagram-caption">SUN → EARTH → MOON · EARTH CASTS ITS SHADOW ON THE MOON</p>`
   };
   visual.innerHTML = diagrams[topic.visual];
@@ -366,8 +411,14 @@ function renderTopic(index) {
     slider.addEventListener("input", updateOrigin);
     updateOrigin({ target: slider });
   }
+  if (topic.visual === "solar-eclipse") {
+    const button = document.querySelector("#eclipseToggle");
+    button.addEventListener("click", updateSolarEclipse);
+    updateSolarEclipse({ currentTarget: button, initialize: true });
+  }
 }
 
+/** Move the collision origin marker to the user's pointer position. */
 function updateOrigin(event) {
   const stageNumber = Number(event.target.value);
   const captions = [
@@ -382,9 +433,25 @@ function updateOrigin(event) {
   document.querySelector("#originCaption").textContent = captions[stageNumber];
 }
 
+/** Toggle the solar-eclipse diagram between alignment and a five-degree near-miss. */
+function updateSolarEclipse(event) {
+  const wasPressed = event.currentTarget.getAttribute("aria-pressed") === "true";
+  const missesEarth = event.initialize ? false : !wasPressed;
+  const visual = document.querySelector("#topicVisual");
+  visual.dataset.alignment = missesEarth ? "miss" : "eclipse";
+  event.currentTarget.setAttribute("aria-pressed", String(missesEarth));
+  event.currentTarget.textContent = missesEarth ? "SHOW ECLIPSE" : "SHOW 5° MISS";
+  document.querySelector("#eclipseCaption").textContent = missesEarth
+    ? "ABOVE THE SUN–EARTH LINE · THE SHADOW MISSES EARTH"
+    : "CROSSING THE SUN–EARTH LINE · THE SHADOW REACHES EARTH";
+}
+
 renderTopic(0);
 
+// Reference the reusable dialog that presents Phase Atlas details.
 const dialog = document.querySelector("#phaseDialog");
+
+/** Open the detail dialog for a selected lunar phase. */
 function openPhase(index) {
   const illumination = index <= 4 ? index / 4 : (8 - index) / 4;
   const shadowSize = Math.round(92 * (1 - illumination));
@@ -403,18 +470,20 @@ dialog.addEventListener("click", event => {
   if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close();
 });
 
+/** Display a fact and synchronize its image, labels, and progress state. */
 function showFact(index) {
   const totalSlides = facts.length * 2;
   state.fact = (index + totalSlides) % totalSlides;
   const factIndex = Math.floor(state.fact / 2);
   const pictureOnly = state.fact % 2 === 1;
-  const [level, kicker, copy] = facts[factIndex];
+  const [level, kicker, copy, sourceUrl] = facts[factIndex];
   const card = document.querySelector(".fact-card");
   card.classList.toggle("picture-only", pictureOnly);
   card.classList.toggle("text-only", !pictureOnly);
   document.querySelector("#factLevel").textContent = level;
   document.querySelector("#factKicker").textContent = kicker;
   document.querySelector("#factCopy").textContent = copy;
+  document.querySelector("#factSource").href = sourceUrl;
   const imageLabels = [
     "The Moon and Earth in a star field", "A close view of Tycho crater", "Galileo observing the Moon",
     "A playful smiling cratered Moon", "An Apollo-era astronaut on the lunar surface", "A mouse discovering the Moon is not cheese",
@@ -434,6 +503,7 @@ document.querySelector("#prevFact").addEventListener("click", () => navigateFact
 document.querySelector("#nextFact").addEventListener("click", () => navigateFact(1));
 
 let factTimer;
+/** Restart the timer that automatically advances the active fact. */
 function resetFactTimer() {
   clearTimeout(factTimer);
   factTimer = setTimeout(() => {
@@ -442,6 +512,7 @@ function resetFactTimer() {
   }, 9000);
 }
 
+/** Move through the fact sequence in either direction with wrapping. */
 function navigateFact(direction) {
   clearTimeout(factTimer);
   showFact(state.fact + direction);
@@ -482,6 +553,7 @@ window.addEventListener("keydown", event => {
   draw();
 });
 
+// Track pointer dragging while the user manually controls the orbit.
 let dragging = false;
 stage.addEventListener("pointerdown", event => {
   const rect = stage.getBoundingClientRect();
@@ -520,6 +592,7 @@ showFact(0);
 resize();
 resetFactTimer();
 
+/** Advance automatic motion and schedule the next animation frame. */
 function animate(time) {
   if (state.autoOrbit && state.mode === "orbit") {
     const delta = Math.min(40, time - (state.lastFrame || time));
