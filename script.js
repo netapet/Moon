@@ -624,6 +624,19 @@ showFact(0);
 resize();
 resetFactTimer();
 
+// Display the privacy-friendly total recorded by GoatCounter.
+fetch("https://hmcounter.goatcounter.com/counter/TOTAL.json")
+  .then(response => {
+    if (!response.ok) throw new Error("Visitor count unavailable");
+    return response.json();
+  })
+  .then(data => {
+    document.querySelector("#visitorCount").textContent = data.count;
+  })
+  .catch(() => {
+    document.querySelector("#visitorCount").textContent = "—";
+  });
+
 /** Advance automatic motion and schedule the next animation frame. */
 function animate(time) {
   if (state.autoOrbit && state.mode === "orbit") {
