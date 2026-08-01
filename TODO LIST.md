@@ -1,0 +1,5 @@
+- [x] Put some continents on the Earth, showing Oz
+- [x] Add more rays from the Sun and more glow
+- [x] Correct phase tooltips, including Last Quarter
+- [x] Mention Theia in the Origin slide
+- [x] Add educational games in a new Moon Games tab

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="An interactive 3D-style moon phase explorer for students.">
   <title>Lunar Loop — Moon Phase Explorer</title>
-  <link rel="stylesheet" href="styles.css?v=16">
+  <link rel="stylesheet" href="styles.css?v=17">
 </head>
 <body class="southern-view">
   <div class="cosmic-drift" aria-hidden="true">
@@ -30,6 +30,9 @@
         </button>
         <button class="mode-button" data-mode="deep" aria-pressed="false">
           <span class="button-number">03</span> Deep Dives
+        </button>
+        <button class="mode-button" data-mode="games" aria-pressed="false">
+          <span class="button-number">04</span> Moon Games
         </button>
       </div>
       <div class="view-controls">
@@ -107,6 +110,40 @@
           <div class="topic-visual" id="topicVisual" aria-label="Scientific diagram"></div>
         </article>
       </section>
+
+      <section class="games-lab" id="gamesLab" hidden aria-label="Moon learning games">
+        <div class="games-heading">
+          <p class="eyebrow">TEST YOUR LUNAR KNOWLEDGE</p>
+          <h2>Play the <em>Moon.</em></h2>
+          <p>Three quick challenges. No score pressure—just another orbit around what you know.</p>
+        </div>
+        <div class="game-grid">
+          <article class="game-card">
+            <p class="game-number">GAME 01 · PHASE MATCH</p>
+            <h3>Name that phase</h3>
+            <div class="game-moon" id="quizMoon" aria-label="Moon phase to identify"></div>
+            <div class="game-options" id="phaseQuizOptions"></div>
+            <p class="game-feedback" id="phaseQuizFeedback" aria-live="polite">Choose the phase shown above.</p>
+          </article>
+          <article class="game-card">
+            <p class="game-number">GAME 02 · TRUE OR FALSE</p>
+            <h3>Lunar fact check</h3>
+            <p class="fact-question" id="factQuestion"></p>
+            <div class="binary-options">
+              <button type="button" data-answer="true">TRUE</button>
+              <button type="button" data-answer="false">FALSE</button>
+            </div>
+            <p class="game-feedback" id="factFeedback" aria-live="polite">Make your call.</p>
+          </article>
+          <article class="game-card">
+            <p class="game-number">GAME 03 · NEXT IN ORBIT</p>
+            <h3>What comes next?</h3>
+            <p class="sequence-current" id="sequenceCurrent"></p>
+            <div class="game-options" id="sequenceOptions"></div>
+            <p class="game-feedback" id="sequenceFeedback" aria-live="polite">Follow the phase cycle forward.</p>
+          </article>
+        </div>
+      </section>
     </section>
 
     <section class="phase-strip" id="phaseStrip" aria-label="The eight moon phases"></section>
@@ -133,6 +170,6 @@
     allow="autoplay; encrypted-media"
   ></iframe>
   <script data-goatcounter="https://hmcounter.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-  <script src="script.js?v=16"></script>
+  <script src="script.js?v=17"></script>
 </body>
 </html>

@@ -42,7 +42,7 @@ const facts = [
 const topics = [
   {
     short: "Origin", title: "Born from a giant collision",
-    summary: "About 4.5 billion years ago, a young world roughly the size of Mars struck the early Earth. Debris blasted into orbit, gathered together, and became our Moon.",
+    summary: "About 4.5 billion years ago, a young world roughly the size of Mars—often called Theia—struck the early Earth. Debris blasted into orbit, gathered together, and became our Moon.",
     details: "<strong>How long did it take?</strong> In traditional debris-disk models, the Moon gathered over months or years; some models take roughly 100 years. A newer high-resolution simulation suggests a large Moon-like body could have formed in just a few hours. The exact route is still an open scientific question.",
     visual: "collision",
     sources: [
@@ -239,6 +239,30 @@ function drawEarth(x, y, radius) {
   ocean.addColorStop(1, "#03283f");
   ctx.fillStyle = ocean;
   ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill();
+  ctx.save();
+  ctx.beginPath(); ctx.arc(x, y, radius * .97, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = "rgba(74,126,79,.96)";
+  const landmass = points => {
+    ctx.beginPath();
+    points.forEach(([px, py], index) => {
+      const pointX = x + px * radius;
+      const pointY = y + py * radius;
+      if (index === 0) ctx.moveTo(pointX, pointY); else ctx.lineTo(pointX, pointY);
+    });
+    ctx.closePath(); ctx.fill();
+  };
+  // Stylised visible hemisphere: Asia, Africa, Australia and nearby islands.
+  landmass([[-.48,-.55],[-.13,-.72],[.24,-.64],[.56,-.42],[.43,-.13],[.12,-.2],[-.02,.02],[-.31,-.08],[-.57,-.3]]);
+  landmass([[-.35,-.02],[-.02,-.08],[.16,.15],[.05,.54],[-.2,.67],[-.38,.36],[-.48,.08]]);
+  landmass([[.2,.37],[.48,.3],[.68,.48],[.51,.68],[.22,.63],[.08,.49]]);
+  landmass([[.55,.04],[.66,.08],[.61,.19],[.52,.15]]);
+  ctx.fillStyle = "rgba(210,222,205,.65)";
+  ctx.beginPath(); ctx.ellipse(x + radius * .42, y + radius * .68, radius * .06, radius * .025, -.35, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "rgba(245,241,232,.85)";
+  ctx.font = `${Math.max(6, radius * .085)}px "DM Mono"`;
+  ctx.textAlign = "center";
+  ctx.fillText("OZ", x + radius * .38, y + radius * .52);
+  ctx.restore();
   ctx.strokeStyle = "rgba(168,225,255,.32)";
   ctx.lineWidth = Math.max(2, radius * .045);
   ctx.stroke();
@@ -268,12 +292,25 @@ function drawEarth(x, y, radius) {
 function drawSun(w, h) {
   const x = w + 65;
   const y = h * .43;
-  const glow = ctx.createRadialGradient(x, y, 5, x, y, 210);
+  const glow = ctx.createRadialGradient(x, y, 5, x, y, 330);
   glow.addColorStop(0, "rgba(255,239,194,1)");
   glow.addColorStop(.2, "rgba(255,137,56,.7)");
   glow.addColorStop(.55, "rgba(255,91,31,.16)");
   glow.addColorStop(1, "rgba(255,89,25,0)");
-  ctx.fillStyle = glow; ctx.fillRect(w - 250, y - 240, 300, 480);
+  ctx.fillStyle = glow; ctx.fillRect(w - 420, y - 360, 470, 720);
+  ctx.save();
+  ctx.globalCompositeOperation = "screen";
+  for (let i = 0; i < 13; i++) {
+    const angle = Math.PI * .62 + i * Math.PI * .06;
+    const length = 210 + (i % 3) * 55;
+    ctx.strokeStyle = `rgba(255,173,92,${.09 + (i % 2) * .035})`;
+    ctx.lineWidth = i % 3 === 0 ? 3 : 1;
+    ctx.beginPath();
+    ctx.moveTo(x + Math.cos(angle) * 92, y + Math.sin(angle) * 92);
+    ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
+    ctx.stroke();
+  }
+  ctx.restore();
   ctx.fillStyle = "#fff3c3"; ctx.beginPath(); ctx.arc(x, y, 105, 0, Math.PI * 2); ctx.fill();
 }
 
@@ -303,7 +340,8 @@ function draw() {
 
   const ordered = moons.map((m, i) => {
     const depth = Math.sin(m.angle);
-    return { ...m, i, depth, x: cx + Math.cos(m.angle) * rx, y: cy + depth * ry };
+    const phaseIndex = phaseIndexAtAngle(m.angle);
+    return { ...m, i, phaseIndex, name: phaseNames[phaseIndex], depth, x: cx + Math.cos(m.angle) * rx, y: cy + depth * ry };
   }).sort((a, b) => a.depth - b.depth);
 
   ordered.filter(m => m.depth < 0).forEach(drawMoon);
@@ -328,15 +366,19 @@ function draw() {
       ctx.textAlign = "center";
       ctx.fillText(String(m.i + 1).padStart(2, "0"), m.x, m.y + radius + 14);
     }
-    state.points.push({ x: m.x, y: m.y, r: radius + 8, name: m.name });
+    state.points.push({ x: m.x, y: m.y, r: radius + 8, index: m.phaseIndex, name: phaseNames[m.phaseIndex] });
   }
+}
+
+/** Convert an orbital angle into its nearest phase index. */
+function phaseIndexAtAngle(a) {
+  const normalized = ((a + Math.PI * 2) % (Math.PI * 2));
+  return Math.round(normalized / (Math.PI / 4)) % 8;
 }
 
 /** Convert an orbital angle into its nearest lunar-phase index. */
 function phaseAtAngle(a) {
-  const normalized = ((a + Math.PI * 2) % (Math.PI * 2));
-  const index = Math.round(normalized / (Math.PI / 4)) % 8;
-  return phaseNames[index];
+  return phaseNames[phaseIndexAtAngle(a)];
 }
 
 /** Switch modes and synchronize the related controls, copy, and panels. */
@@ -349,20 +391,23 @@ function setMode(mode) {
   });
   const orbit = mode === "orbit";
   const deep = mode === "deep";
-  document.querySelector("#modeEyebrow").textContent = deep ? "GO FURTHER" : orbit ? "TAKE CONTROL" : "THE COMPLETE CYCLE";
-  document.querySelector("#modeTitle").innerHTML = deep ? "Eight questions.<br><em>Deeper answers.</em>" : orbit ? "Move the Moon.<br><em>Watch light shift.</em>" : "Eight phases.<br><em>One orbit.</em>";
+  const games = mode === "games";
+  document.querySelector("#modeEyebrow").textContent = games ? "PLAY TO LEARN" : deep ? "GO FURTHER" : orbit ? "TAKE CONTROL" : "THE COMPLETE CYCLE";
+  document.querySelector("#modeTitle").innerHTML = games ? "Three games.<br><em>One bright mind.</em>" : deep ? "Eight questions.<br><em>Deeper answers.</em>" : orbit ? "Move the Moon.<br><em>Watch light shift.</em>" : "Eight phases.<br><em>One orbit.</em>";
   document.querySelector("#modeDescription").textContent = deep
     ? "Explore the Moon’s origin, motion, eclipses, daylight appearances and the view from lunar space."
+    : games ? "Match phases, test lunar facts and follow the Moon through its cycle."
     : orbit ? "Use the arrow keys or drag across space. Notice how the Moon’s position changes the sunlit part we see."
     : "See the Moon’s sunlit half from eight different points in its journey around Earth.";
   keyboardHint.hidden = !orbit;
   keyboardHint.querySelector("span:nth-child(2)").textContent = orbit ? "ARROWS · ENTER FOR AUTO ORBIT" : "MOVE THE MOON";
-  phaseStrip.style.opacity = deep ? ".15" : orbit ? ".35" : "1";
+  phaseStrip.style.opacity = deep || games ? ".15" : orbit ? ".35" : "1";
   document.querySelector(".fact-card").hidden = mode !== "atlas";
   document.querySelector("#deepDive").hidden = !deep;
-  stage.hidden = deep;
-  stage.setAttribute("aria-hidden", String(deep));
-  document.querySelector(".intro").style.opacity = deep ? "0" : "1";
+  document.querySelector("#gamesLab").hidden = !games;
+  stage.hidden = deep || games;
+  stage.setAttribute("aria-hidden", String(deep || games));
+  document.querySelector(".intro").style.opacity = deep || games ? "0" : "1";
   draw();
 }
 
@@ -446,11 +491,11 @@ function renderTopic(index) {
 function updateOrigin(event) {
   const stageNumber = Number(event.target.value);
   const captions = [
-    "A MARS-SIZED BODY APPROACHES THE YOUNG EARTH",
-    "THE COLLISION MELTS AND VAPORIZES ROCK",
+    "THEIA, A MARS-SIZED WORLD, APPROACHES THE YOUNG EARTH",
+    "THEIA COLLIDES WITH EARTH, MELTING AND VAPORIZING ROCK",
     "A HOT DEBRIS DISK FORMS AROUND GLOWING EARTH",
     "GRAVITY PULLS DEBRIS INTO A GROWING CLOUD",
-    "THE MOON MAY HAVE FORMED OVER MONTHS OR YEARS"
+    "A LARGE MOON-LIKE BODY MAY HAVE FORMED IN JUST A FEW HOURS"
   ];
   const visual = document.querySelector("#topicVisual");
   visual.dataset.stage = String(stageNumber);
@@ -476,6 +521,92 @@ function updateSolarEclipse(event) {
 }
 
 renderTopic(0);
+
+// Power the three short educational games in the Moon Games tab.
+const shuffle = items => [...items].sort(() => Math.random() - .5);
+
+function nextPhaseGame() {
+  const correctIndex = Math.floor(Math.random() * phaseNames.length);
+  const choices = shuffle([
+    correctIndex,
+    ...shuffle(phaseNames.map((_, index) => index).filter(index => index !== correctIndex)).slice(0, 3)
+  ]);
+  document.querySelector("#quizMoon").innerHTML = `<i class="mini-moon phase-${correctIndex}"></i>`;
+  const options = document.querySelector("#phaseQuizOptions");
+  options.replaceChildren();
+  document.querySelector("#phaseQuizFeedback").textContent = "Choose the phase shown above.";
+  choices.forEach(index => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = phaseNames[index];
+    button.addEventListener("click", () => {
+      const correct = index === correctIndex;
+      button.classList.add(correct ? "correct" : "wrong");
+      options.querySelectorAll("button").forEach(option => {
+        option.disabled = true;
+        if (option.textContent === phaseNames[correctIndex]) option.classList.add("correct");
+      });
+      document.querySelector("#phaseQuizFeedback").textContent = correct ? "Correct — bright work!" : `That is ${phaseNames[index]}. The answer is ${phaseNames[correctIndex]}.`;
+      setTimeout(nextPhaseGame, 1800);
+    });
+    options.appendChild(button);
+  });
+}
+
+const factChallenges = [
+  ["The Moon makes its own light.", false, "The Moon reflects sunlight."],
+  ["A lunar phase cycle takes about 29.5 days.", true, "That cycle is called a synodic month."],
+  ["Earth’s shadow causes the ordinary Moon phases.", false, "Earth’s shadow causes a lunar eclipse, not the regular phases."],
+  ["The far side of the Moon receives sunlight.", true, "It is not a permanently dark side."],
+  ["The Moon rotates once during each orbit of Earth.", true, "That matching rhythm keeps nearly the same face toward us."]
+];
+
+function nextFactGame() {
+  const challenge = factChallenges[Math.floor(Math.random() * factChallenges.length)];
+  document.querySelector("#factQuestion").textContent = challenge[0];
+  document.querySelector("#factFeedback").textContent = "Make your call.";
+  document.querySelectorAll(".binary-options button").forEach(button => {
+    button.disabled = false;
+    button.className = "";
+    button.onclick = () => {
+      const answer = button.dataset.answer === "true";
+      const correct = answer === challenge[1];
+      button.classList.add(correct ? "correct" : "wrong");
+      document.querySelectorAll(".binary-options button").forEach(option => {
+        option.disabled = true;
+        if ((option.dataset.answer === "true") === challenge[1]) option.classList.add("correct");
+      });
+      document.querySelector("#factFeedback").textContent = `${correct ? "Correct." : "Not quite."} ${challenge[2]}`;
+      setTimeout(nextFactGame, 2200);
+    };
+  });
+}
+
+function nextSequenceGame() {
+  const currentIndex = Math.floor(Math.random() * phaseNames.length);
+  const correctIndex = (currentIndex + 1) % phaseNames.length;
+  const choices = shuffle([correctIndex, (currentIndex + 2) % 8, (currentIndex + 7) % 8]);
+  document.querySelector("#sequenceCurrent").textContent = phaseNames[currentIndex];
+  document.querySelector("#sequenceFeedback").textContent = "Follow the phase cycle forward.";
+  const options = document.querySelector("#sequenceOptions");
+  options.replaceChildren();
+  choices.forEach(index => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = phaseNames[index];
+    button.addEventListener("click", () => {
+      const correct = index === correctIndex;
+      button.classList.add(correct ? "correct" : "wrong");
+      options.querySelectorAll("button").forEach(option => {
+        option.disabled = true;
+        if (option.textContent === phaseNames[correctIndex]) option.classList.add("correct");
+      });
+      document.querySelector("#sequenceFeedback").textContent = correct ? "Correct — one step around the orbit." : `${phaseNames[correctIndex]} comes next.`;
+      setTimeout(nextSequenceGame, 1800);
+    });
+    options.appendChild(button);
+  });
+}
 
 // Reference the reusable dialog that presents Phase Atlas details.
 const dialog = document.querySelector("#phaseDialog");
@@ -593,7 +724,7 @@ stage.addEventListener("pointerdown", event => {
   const y = event.clientY - rect.top;
   if (state.mode === "atlas") {
     const hit = state.points.find(p => Math.hypot(p.x - x, p.y - y) < p.r);
-    if (hit) openPhase(phaseNames.indexOf(hit.name));
+    if (hit) openPhase(hit.index);
   } else {
     dragging = true;
     state.autoOrbit = false;
@@ -608,10 +739,13 @@ stage.addEventListener("pointermove", event => {
   }
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
-  const hit = state.points.find(p => Math.hypot(p.x - x, p.y - y) < p.r);
+  const hit = state.points
+    .map(point => ({ ...point, distance: Math.hypot(point.x - x, point.y - y) }))
+    .filter(point => point.distance < point.r)
+    .sort((a, b) => a.distance - b.distance)[0];
   tooltip.classList.toggle("show", Boolean(hit));
   if (hit) {
-    tooltip.textContent = hit.name;
+    tooltip.textContent = hit.name || phaseNames[hit.index];
     tooltip.style.left = `${hit.x}px`;
     tooltip.style.top = `${hit.y}px`;
   }
@@ -620,6 +754,9 @@ stage.addEventListener("pointerup", () => dragging = false);
 stage.addEventListener("pointerleave", () => { dragging = false; tooltip.classList.remove("show"); });
 
 window.addEventListener("resize", resize);
+nextPhaseGame();
+nextFactGame();
+nextSequenceGame();
 showFact(0);
 resize();
 resetFactTimer();
