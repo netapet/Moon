@@ -254,7 +254,8 @@ h1 em { font-family: "Playfair Display", serif; font-weight: 600; color: var(--o
 .mini-moon.phase-6 { background: linear-gradient(90deg, #d9d8d0 50%, #111619 50%); }
 .mini-moon.phase-7::after { transform: translateX(4px); }
 .southern-view .mini-moon, .southern-view .dialog-moon { transform: scaleX(-1); }
-footer { height: 68px; display: flex; justify-content: space-between; align-items: center; padding: 0 4vw; border-top: 1px solid var(--line); color: #777e7d; font: 8px "DM Mono", monospace; letter-spacing: .16em; }
+footer { position:absolute; z-index:6; left:0; right:0; bottom:68px; height:24px; display:flex; justify-content:space-between; align-items:center; padding:0 4vw; color:#777e7d; font:8px "DM Mono",monospace; letter-spacing:.16em; pointer-events:none; }
+footer p { margin:0; }
 footer strong { color: var(--ink); font-weight: 400; }
 .visitor-counter { color:var(--muted); }
 .visitor-counter strong { color:var(--orange); }
@@ -286,6 +287,7 @@ footer strong { color: var(--ink); font-weight: 400; }
   .origin-video { display:none; }
   .topic-visual { min-height: 390px; }
   .phase-strip { justify-content: flex-start; }
+  footer { position:static; height:68px; padding:0 4vw; border-top:1px solid var(--line); pointer-events:auto; }
 }
 
 @media (max-width: 520px) {
