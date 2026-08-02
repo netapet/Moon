@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="An interactive 3D-style moon phase explorer for students.">
   <title>Lunar Loop — Moon Phase Explorer</title>
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body class="southern-view">
   <div class="cosmic-drift" aria-hidden="true">
@@ -58,6 +58,15 @@
           <span>MOVE THE MOON</span>
           <span class="key">→</span>
         </div>
+        <aside class="orbit-challenge" id="orbitChallenge" hidden aria-live="polite">
+          <p class="game-number">ORBIT CHALLENGE</p>
+          <p>Move the Moon to <strong id="orbitTarget">First Quarter</strong></p>
+          <div class="orbit-challenge-actions">
+            <button type="button" id="checkOrbitPosition">LOCK POSITION</button>
+            <button type="button" id="newOrbitTarget">NEW TARGET</button>
+          </div>
+          <p id="orbitChallengeFeedback">Drag the Moon or use the arrow keys, then lock your answer.</p>
+        </aside>
       </div>
 
       <aside class="fact-card" aria-live="polite">
@@ -114,35 +123,26 @@
       <section class="games-lab" id="gamesLab" hidden aria-label="Moon learning games">
         <div class="games-heading">
           <p class="eyebrow">TEST YOUR LUNAR KNOWLEDGE</p>
-          <h2>Play the <em>Moon.</em></h2>
-          <p>Three quick challenges. No score pressure—just another orbit around what you know.</p>
+          <h2>The Lunar <em>Quiz.</em></h2>
+          <p>Ten questions, one at a time. Every answer comes with an explanation before you move on.</p>
         </div>
-        <div class="game-grid">
-          <article class="game-card">
-            <p class="game-number">GAME 01 · PHASE MATCH</p>
-            <h3>Name that phase</h3>
-            <div class="game-moon" id="quizMoon" aria-label="Moon phase to identify"></div>
-            <div class="game-options" id="phaseQuizOptions"></div>
-            <p class="game-feedback" id="phaseQuizFeedback" aria-live="polite">Choose the phase shown above.</p>
-          </article>
-          <article class="game-card">
-            <p class="game-number">GAME 02 · TRUE OR FALSE</p>
-            <h3>Lunar fact check</h3>
-            <p class="fact-question" id="factQuestion"></p>
-            <div class="binary-options">
-              <button type="button" data-answer="true">TRUE</button>
-              <button type="button" data-answer="false">FALSE</button>
+        <article class="quiz-card">
+          <div class="quiz-progress-row">
+            <span id="quizProgress">QUESTION 01 / 10</span>
+            <span>SCORE · <strong id="quizScore">0</strong></span>
+          </div>
+          <div class="quiz-progress"><i id="quizProgressBar"></i></div>
+          <div class="quiz-content">
+            <div class="quiz-visual" id="quizVisual" aria-hidden="true"></div>
+            <div>
+              <p class="quiz-kicker" id="quizKicker">MOONLIGHT</p>
+              <h3 id="quizQuestion"></h3>
+              <div class="quiz-options" id="quizOptions"></div>
+              <div class="quiz-explanation" id="quizExplanation" hidden aria-live="polite"></div>
+              <button class="quiz-next" id="quizNext" type="button" hidden>NEXT QUESTION →</button>
             </div>
-            <p class="game-feedback" id="factFeedback" aria-live="polite">Make your call.</p>
-          </article>
-          <article class="game-card">
-            <p class="game-number">GAME 03 · NEXT IN ORBIT</p>
-            <h3>What comes next?</h3>
-            <p class="sequence-current" id="sequenceCurrent"></p>
-            <div class="game-options" id="sequenceOptions"></div>
-            <p class="game-feedback" id="sequenceFeedback" aria-live="polite">Follow the phase cycle forward.</p>
-          </article>
-        </div>
+          </div>
+        </article>
       </section>
     </section>
 
@@ -170,6 +170,6 @@
     allow="autoplay; encrypted-media"
   ></iframe>
   <script data-goatcounter="https://hmcounter.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-  <script src="script.js?v=17"></script>
+  <script src="script.js?v=19"></script>
 </body>
 </html>

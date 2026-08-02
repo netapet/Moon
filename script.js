@@ -393,10 +393,10 @@ function setMode(mode) {
   const deep = mode === "deep";
   const games = mode === "games";
   document.querySelector("#modeEyebrow").textContent = games ? "PLAY TO LEARN" : deep ? "GO FURTHER" : orbit ? "TAKE CONTROL" : "THE COMPLETE CYCLE";
-  document.querySelector("#modeTitle").innerHTML = games ? "Three games.<br><em>One bright mind.</em>" : deep ? "Eight questions.<br><em>Deeper answers.</em>" : orbit ? "Move the Moon.<br><em>Watch light shift.</em>" : "Eight phases.<br><em>One orbit.</em>";
+  document.querySelector("#modeTitle").innerHTML = games ? "Ten questions.<br><em>One lunar journey.</em>" : deep ? "Eight questions.<br><em>Deeper answers.</em>" : orbit ? "Move the Moon.<br><em>Watch light shift.</em>" : "Eight phases.<br><em>One orbit.</em>";
   document.querySelector("#modeDescription").textContent = deep
     ? "Explore the Moon’s origin, motion, eclipses, daylight appearances and the view from lunar space."
-    : games ? "Match phases, test lunar facts and follow the Moon through its cycle."
+    : games ? "Answer at your own pace, learn from every explanation and see your score at the end."
     : orbit ? "Use the arrow keys or drag across space. Notice how the Moon’s position changes the sunlit part we see."
     : "See the Moon’s sunlit half from eight different points in its journey around Earth.";
   keyboardHint.hidden = !orbit;
@@ -405,6 +405,7 @@ function setMode(mode) {
   document.querySelector(".fact-card").hidden = mode !== "atlas";
   document.querySelector("#deepDive").hidden = !deep;
   document.querySelector("#gamesLab").hidden = !games;
+  document.querySelector("#orbitChallenge").hidden = !orbit;
   stage.hidden = deep || games;
   stage.setAttribute("aria-hidden", String(deep || games));
   document.querySelector(".intro").style.opacity = deep || games ? "0" : "1";
@@ -522,91 +523,121 @@ function updateSolarEclipse(event) {
 
 renderTopic(0);
 
-// Power the three short educational games in the Moon Games tab.
-const shuffle = items => [...items].sort(() => Math.random() - .5);
-
-function nextPhaseGame() {
-  const correctIndex = Math.floor(Math.random() * phaseNames.length);
-  const choices = shuffle([
-    correctIndex,
-    ...shuffle(phaseNames.map((_, index) => index).filter(index => index !== correctIndex)).slice(0, 3)
-  ]);
-  document.querySelector("#quizMoon").innerHTML = `<i class="mini-moon phase-${correctIndex}"></i>`;
-  const options = document.querySelector("#phaseQuizOptions");
-  options.replaceChildren();
-  document.querySelector("#phaseQuizFeedback").textContent = "Choose the phase shown above.";
-  choices.forEach(index => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = phaseNames[index];
-    button.addEventListener("click", () => {
-      const correct = index === correctIndex;
-      button.classList.add(correct ? "correct" : "wrong");
-      options.querySelectorAll("button").forEach(option => {
-        option.disabled = true;
-        if (option.textContent === phaseNames[correctIndex]) option.classList.add("correct");
-      });
-      document.querySelector("#phaseQuizFeedback").textContent = correct ? "Correct — bright work!" : `That is ${phaseNames[index]}. The answer is ${phaseNames[correctIndex]}.`;
-      setTimeout(nextPhaseGame, 1800);
-    });
-    options.appendChild(button);
-  });
-}
-
-const factChallenges = [
-  ["The Moon makes its own light.", false, "The Moon reflects sunlight."],
-  ["A lunar phase cycle takes about 29.5 days.", true, "That cycle is called a synodic month."],
-  ["Earth’s shadow causes the ordinary Moon phases.", false, "Earth’s shadow causes a lunar eclipse, not the regular phases."],
-  ["The far side of the Moon receives sunlight.", true, "It is not a permanently dark side."],
-  ["The Moon rotates once during each orbit of Earth.", true, "That matching rhythm keeps nearly the same face toward us."]
+// Run one ten-question quiz, explaining every answer before advancing.
+const quizQuestions = [
+  { kicker:"MOONLIGHT", question:"Where does the Moon’s visible light come from?", options:["The Moon produces it","Sunlight reflected by the Moon","Light reflected by Earth","Glowing lunar rocks"], answer:1, explanation:"The Moon does not make visible light of its own. Sunlight strikes its surface and reflects toward Earth.", visual:"☀" },
+  { kicker:"PHASES", question:"What causes the Moon’s regular phases?", options:["Earth’s shadow","Clouds crossing the Moon","Our changing view of its sunlit half","The Moon changing shape"], answer:2, explanation:"Half of the Moon is always sunlit. As it orbits Earth, we see different fractions of that illuminated hemisphere.", visual:"phase-3" },
+  { kicker:"ORBIT CLOCK", question:"About how long is one complete lunar phase cycle?", options:["24 hours","7 days","29.5 days","365 days"], answer:2, explanation:"New Moon to New Moon takes about 29.5 days. This is called a synodic month.", visual:"29.5" },
+  { kicker:"NEXT IN ORBIT", question:"Which phase comes immediately after First Quarter?", options:["Waning Crescent","Waxing Gibbous","Full Moon","New Moon"], answer:1, explanation:"After First Quarter, the illuminated portion keeps growing—or waxing—so the next phase is Waxing Gibbous.", visual:"phase-2" },
+  { kicker:"TIDAL LOCK", question:"Why do we see nearly the same face of the Moon?", options:["It never rotates","It rotates once per orbit","Earth blocks the far side","The far side has no sunlight"], answer:1, explanation:"The Moon rotates once in the same time it takes to orbit Earth. This synchronous rotation is called tidal locking.", visual:"↻" },
+  { kicker:"ECLIPSES", question:"Why isn’t there a lunar eclipse every Full Moon?", options:["The Moon is too dim","Earth’s shadow disappears","The lunar orbit is tilted about 5°","Full Moon lasts too briefly"], answer:2, explanation:"The Moon’s orbit is tilted about 5° to Earth’s orbital plane, so most Full Moons pass above or below Earth’s shadow.", visual:"5°" },
+  { kicker:"ORIGIN", question:"What name is often given to the young world that struck early Earth?", options:["Theia","Titan","Luna","Ceres"], answer:0, explanation:"The hypothetical Mars-sized impactor is often called Theia. Debris from the collision may have gathered to form the Moon.", visual:"T" },
+  { kicker:"DAY MOON", question:"Can the Moon be visible during daylight?", options:["Never","Only during eclipses","Yes, during many phases","Only from the poles"], answer:2, explanation:"The Moon is above the horizon during daylight for much of its cycle, and reflected sunlight can be bright enough to see against the blue sky.", visual:"phase-2" },
+  { kicker:"FULL MOON", question:"At Full Moon, where is the Moon broadly located?", options:["Between Earth and Sun","Opposite the Sun from Earth","Directly above the Sun","Inside Earth’s atmosphere"], answer:1, explanation:"At Full Moon, Earth is broadly between the Sun and Moon. Precise alignment is uncommon; when it happens, a lunar eclipse occurs.", visual:"phase-4" },
+  { kicker:"LUNAR WORDS", question:"What does “waxing” mean in a phase name?", options:["Growing illumination","Fading illumination","Completely dark","More distant"], answer:0, explanation:"Waxing means the illuminated portion we see is growing. Waning means it is shrinking.", visual:"phase-1" }
 ];
 
-function nextFactGame() {
-  const challenge = factChallenges[Math.floor(Math.random() * factChallenges.length)];
-  document.querySelector("#factQuestion").textContent = challenge[0];
-  document.querySelector("#factFeedback").textContent = "Make your call.";
-  document.querySelectorAll(".binary-options button").forEach(button => {
-    button.disabled = false;
-    button.className = "";
-    button.onclick = () => {
-      const answer = button.dataset.answer === "true";
-      const correct = answer === challenge[1];
-      button.classList.add(correct ? "correct" : "wrong");
-      document.querySelectorAll(".binary-options button").forEach(option => {
-        option.disabled = true;
-        if ((option.dataset.answer === "true") === challenge[1]) option.classList.add("correct");
-      });
-      document.querySelector("#factFeedback").textContent = `${correct ? "Correct." : "Not quite."} ${challenge[2]}`;
-      setTimeout(nextFactGame, 2200);
-    };
-  });
-}
+let quizIndex = 0;
+let quizScore = 0;
 
-function nextSequenceGame() {
-  const currentIndex = Math.floor(Math.random() * phaseNames.length);
-  const correctIndex = (currentIndex + 1) % phaseNames.length;
-  const choices = shuffle([correctIndex, (currentIndex + 2) % 8, (currentIndex + 7) % 8]);
-  document.querySelector("#sequenceCurrent").textContent = phaseNames[currentIndex];
-  document.querySelector("#sequenceFeedback").textContent = "Follow the phase cycle forward.";
-  const options = document.querySelector("#sequenceOptions");
+function renderQuizQuestion() {
+  const question = quizQuestions[quizIndex];
+  document.querySelector("#quizProgress").textContent = `QUESTION ${String(quizIndex + 1).padStart(2,"0")} / ${quizQuestions.length}`;
+  document.querySelector("#quizScore").textContent = quizScore;
+  document.querySelector("#quizProgressBar").style.width = `${((quizIndex + 1) / quizQuestions.length) * 100}%`;
+  document.querySelector("#quizKicker").textContent = question.kicker;
+  document.querySelector("#quizQuestion").textContent = question.question;
+  const visual = document.querySelector("#quizVisual");
+  visual.innerHTML = question.visual.startsWith("phase-") ? `<i class="mini-moon ${question.visual}"></i>` : question.visual;
+  const options = document.querySelector("#quizOptions");
   options.replaceChildren();
-  choices.forEach(index => {
+  question.options.forEach((label, answerIndex) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.textContent = phaseNames[index];
-    button.addEventListener("click", () => {
-      const correct = index === correctIndex;
-      button.classList.add(correct ? "correct" : "wrong");
-      options.querySelectorAll("button").forEach(option => {
-        option.disabled = true;
-        if (option.textContent === phaseNames[correctIndex]) option.classList.add("correct");
-      });
-      document.querySelector("#sequenceFeedback").textContent = correct ? "Correct — one step around the orbit." : `${phaseNames[correctIndex]} comes next.`;
-      setTimeout(nextSequenceGame, 1800);
-    });
+    button.textContent = label;
+    button.addEventListener("click", () => answerQuizQuestion(answerIndex, button));
     options.appendChild(button);
   });
+  document.querySelector("#quizExplanation").hidden = true;
+  document.querySelector("#quizNext").hidden = true;
 }
+
+function answerQuizQuestion(answerIndex, selectedButton) {
+  const question = quizQuestions[quizIndex];
+  const correct = answerIndex === question.answer;
+  if (correct) quizScore += 1;
+  const options = document.querySelectorAll("#quizOptions button");
+  options.forEach((button, index) => {
+    button.disabled = true;
+    if (index === question.answer) button.classList.add("correct");
+  });
+  if (!correct) selectedButton.classList.add("wrong");
+  document.querySelector("#quizScore").textContent = quizScore;
+  const explanation = document.querySelector("#quizExplanation");
+  explanation.innerHTML = `<strong>${correct ? "Correct." : "Not quite."}</strong> ${question.explanation}`;
+  explanation.hidden = false;
+  const next = document.querySelector("#quizNext");
+  next.textContent = quizIndex === quizQuestions.length - 1 ? "SEE RESULTS →" : "NEXT QUESTION →";
+  next.hidden = false;
+}
+
+function advanceQuiz() {
+  if (quizIndex < quizQuestions.length - 1) {
+    quizIndex += 1;
+    renderQuizQuestion();
+    return;
+  }
+  document.querySelector("#quizKicker").textContent = "ORBIT COMPLETE";
+  document.querySelector("#quizQuestion").textContent = `You scored ${quizScore} out of ${quizQuestions.length}.`;
+  document.querySelector("#quizVisual").textContent = quizScore >= 8 ? "★" : "↻";
+  document.querySelector("#quizOptions").replaceChildren();
+  const explanation = document.querySelector("#quizExplanation");
+  explanation.textContent = quizScore >= 8 ? "Excellent lunar navigation." : "Every orbit teaches you something. Try again and beat your score.";
+  explanation.hidden = false;
+  const next = document.querySelector("#quizNext");
+  next.textContent = "RESTART QUIZ";
+  next.hidden = false;
+  next.dataset.restart = "true";
+}
+
+document.querySelector("#quizNext").addEventListener("click", event => {
+  if (event.currentTarget.dataset.restart === "true") {
+    quizIndex = 0;
+    quizScore = 0;
+    delete event.currentTarget.dataset.restart;
+    renderQuizQuestion();
+  } else {
+    advanceQuiz();
+  }
+});
+
+let orbitTargetIndex = 2;
+
+function chooseOrbitTarget() {
+  const currentIndex = phaseIndexAtAngle(state.orbitAngle);
+  const choices = phaseNames.map((_, index) => index).filter(index => index !== currentIndex && index !== orbitTargetIndex);
+  orbitTargetIndex = choices[Math.floor(Math.random() * choices.length)];
+  document.querySelector("#orbitTarget").textContent = phaseNames[orbitTargetIndex];
+  document.querySelector("#orbitChallengeFeedback").textContent = "Drag the Moon or use the arrow keys, then lock your answer.";
+}
+
+function checkOrbitChallenge() {
+  state.autoOrbit = false;
+  const currentIndex = phaseIndexAtAngle(state.orbitAngle);
+  const feedback = document.querySelector("#orbitChallengeFeedback");
+  if (currentIndex === orbitTargetIndex) {
+    feedback.textContent = `Correct — that position shows ${phaseNames[currentIndex]}. New target ready!`;
+    setTimeout(chooseOrbitTarget, 1400);
+  } else {
+    const clockwiseSteps = (orbitTargetIndex - currentIndex + 8) % 8;
+    const anticlockwiseSteps = (currentIndex - orbitTargetIndex + 8) % 8;
+    const direction = clockwiseSteps <= anticlockwiseSteps ? "right" : "left";
+    feedback.textContent = `You are at ${phaseNames[currentIndex]}. Move ${direction} toward ${phaseNames[orbitTargetIndex]}.`;
+  }
+}
+
+document.querySelector("#checkOrbitPosition").addEventListener("click", checkOrbitChallenge);
+document.querySelector("#newOrbitTarget").addEventListener("click", chooseOrbitTarget);
 
 // Reference the reusable dialog that presents Phase Atlas details.
 const dialog = document.querySelector("#phaseDialog");
@@ -754,9 +785,8 @@ stage.addEventListener("pointerup", () => dragging = false);
 stage.addEventListener("pointerleave", () => { dragging = false; tooltip.classList.remove("show"); });
 
 window.addEventListener("resize", resize);
-nextPhaseGame();
-nextFactGame();
-nextSequenceGame();
+renderQuizQuestion();
+chooseOrbitTarget();
 showFact(0);
 resize();
 resetFactTimer();

@@ -21,5 +21,7 @@ No build command or server is required.
 
 - Choose **Phase Atlas** to see all eight phases.
 - Choose **Orbit Lab**, then use the left/right arrow keys or drag across the orbit. Press **Enter** to start or pause automatic orbiting.
+- In **Orbit Lab**, move the Moon to the requested phase and choose **Lock Position** to check your answer.
+- Choose **Moon Games** for a ten-question quiz with an explanation after every answer.
 - In **Phase Atlas**, click any Moon to read its description. Click outside the card to close it.
 - Use the arrows on the field-notes card to browse facts; they also advance automatically.
